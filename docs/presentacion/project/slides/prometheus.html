@@ -1,0 +1,22 @@
+<section id="prometheus">
+<p class="eyebrow">Prometheus · Proyecto graduado de la CNCF (2018)</p>
+<h2>Un modelo pull sobre una base de datos de series temporales</h2>
+<div class="row" style="gap:48px;">
+<div class="col" style="flex:1.1;">
+<ul class="list">
+<li><b>Pull:</b> Prometheus consulta <span class="mono">/metrics</span> de cada servicio cada N segundos. Si no puede, <span class="mono">up = 0</span>.</li>
+<li><b>Modelo de datos:</b> nombre de métrica más etiquetas (clave=valor). Cada combinación de etiquetas es una serie.</li>
+<li><b>PromQL:</b> lenguaje para agregar y calcular tasas, cocientes y percentiles.</li>
+<li><b>Reglas:</b> recording rules (precalculan) y alerting rules (umbral + duración).</li>
+</ul>
+</div>
+<div class="col" style="flex:0.9; gap:16px;">
+<div class="box"><p class="t mono">Counter</p><p class="s">Solo sube. Peticiones, errores.</p></div>
+<div class="box"><p class="t mono">Gauge</p><p class="s">Sube y baja. Peticiones en curso, memoria.</p></div>
+<div class="box acc"><p class="t mono">Histogram</p><p class="s">Cuenta observaciones por buckets. Permite percentiles agregables.</p></div>
+<div class="box"><p class="t mono">Summary</p><p class="s">Percentiles en el cliente. No se pueden agregar entre instancias.</p></div>
+</div>
+</div>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 2] — 3:30 a 4:45. Prometheus fue el segundo proyecto en graduarse en la CNCF, después de Kubernetes. Explicar el modelo pull y por qué up=0 es la única señal que daría un monitoreo de disponibilidad. Elegimos Histogram y no Summary porque se puede agregar entre rutas e instancias. Grafana no almacena nada: solo consulta a Prometheus con PromQL y visualiza.</aside>
+</section>

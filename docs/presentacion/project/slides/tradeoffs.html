@@ -1,0 +1,28 @@
+<section id="tradeoffs">
+<p class="eyebrow">Análisis crítico</p>
+<h2>Prometheus y Grafana: ventajas y limitaciones</h2>
+<div class="row" style="gap:40px;">
+<div class="col" style="flex:1;">
+<p class="pill blue">Ventajas</p>
+<ul class="list">
+<li>Estándar de facto en cloud native y formato abierto (OpenMetrics).</li>
+<li>PromQL expresa tasas, cocientes y percentiles en una línea.</li>
+<li>Modelo pull: <span class="mono">up</span> sale gratis y el servicio no depende del monitor.</li>
+<li>Todo es código versionable: reglas, datasources, dashboards.</li>
+<li>Bajo costo para un servicio: unos cientos de series.</li>
+</ul>
+</div>
+<div class="col" style="flex:1;">
+<p class="pill">Limitaciones</p>
+<ul class="list">
+<li>Percentiles aproximados: interpolación dentro de cada bucket.</li>
+<li>Muestreo cada 5–60 s: los picos breves se suavizan.</li>
+<li>Un solo nodo y retención local: para HA o largo plazo hacen falta Thanos o Mimir.</li>
+<li>La cardinalidad mal controlada degrada a Prometheus.</li>
+<li>Las métricas dicen qué pasa y dónde, pero no por qué: faltan trazas y logs.</li>
+</ul>
+</div>
+</div>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 3] — 13:00 a 14:00. Ejemplo concreto de la limitación de percentiles: si p95 cae entre los buckets de 1 s y 1,5 s, Prometheus interpola linealmente y el valor puede diferir del real. Por eso los buckets se eligen alrededor del umbral del SLO. Las métricas responden “qué” y “dónde” (la ruta), pero para el “por qué” se necesitan trazas (OpenTelemetry) y logs.</aside>
+</section>

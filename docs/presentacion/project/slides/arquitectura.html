@@ -1,0 +1,21 @@
+<section id="arquitectura" class="alt">
+<p class="eyebrow">La PoC</p>
+<h2>Arquitectura del laboratorio</h2>
+<div class="row" style="align-items:center; gap:0; margin-top:16px;">
+<div class="box in" style="--i:0; width:300px;"><p class="t">k6</p><p class="s">30 req/s constantes</p><p class="s">Activa el escenario</p></div>
+<x-connector style="width:90px; color:#4A5363;" from="tl"></x-connector>
+<div class="box ink in" style="--i:1; width:360px;"><p class="t">API Node.js</p><p class="s">Express + prom-client</p><p class="s mono">/api/* · /health · /metrics</p><p class="s mono">/admin/chaos</p></div>
+<x-connector style="width:90px; color:#4A5363;" from="tl"></x-connector>
+<div class="box acc in" style="--i:2; width:340px;"><p class="t">Prometheus</p><p class="s">Scrape cada 5 s (pull)</p><p class="s">Reglas y alertas</p></div>
+<x-connector style="width:90px; color:#4A5363;" from="tl"></x-connector>
+<div class="box in" style="--i:3; width:300px;"><p class="t">Grafana</p><p class="s">Dashboard RED</p><p class="s">Provisionado</p></div>
+</div>
+<div class="row" style="margin-top:24px;">
+<p class="pill blue">Docker Compose · 4 servicios</p>
+<p class="pill blue">Configuración como código</p>
+<p class="pill blue">Dashboard generado por script</p>
+</div>
+<p class="small" style="max-width:1600px;">El modo de fallo se cambia con <span class="mono">POST /admin/chaos</span> y no con el tráfico: los tres escenarios reciben exactamente la misma carga. Así, cualquier diferencia en las métricas se debe al fallo inyectado.</p>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 2] — 4:45 a 5:45. Recorrer la arquitectura de izquierda a derecha. Subrayar el diseño experimental: carga idéntica y solo cambia la variable “fallo”. Usamos tasa de llegada constante (modelo abierto): si la API se vuelve lenta, k6 no frena, y así no ocultamos la degradación (coordinated omission). Todo es reproducible con un comando: docker compose up.</aside>
+</section>

@@ -1,0 +1,12 @@
+<section id="conclusiones" class="alt">
+<p class="eyebrow">Conclusiones</p>
+<h2>Qué nos llevamos</h2>
+<div class="col" style="gap:20px;">
+<div class="box in" style="--i:0;"><p class="t">1. La disponibilidad es necesaria pero no suficiente</p><p class="s">En los dos escenarios de degradación, up = 1 y /health = 200 en todo momento.</p></div>
+<div class="box in" style="--i:1;"><p class="t">2. Cada señal detecta un tipo de fallo distinto</p><p class="s">La latencia no ve los errores y la tasa de errores no ve la lentitud. Hacen falta las tres.</p></div>
+<div class="box acc in" style="--i:2;"><p class="t">3. Alertar sobre percentiles, nunca sobre el promedio</p><p class="s">Una degradación parcial mueve poco la media y la mediana, pero dispara p95 y p99.</p></div>
+<div class="box in" style="--i:3;"><p class="t">4. La instrumentación también se valida</p><p class="s">Una etiqueta mal asignada ocultó todos los errores. Hay que contrastar con una fuente independiente.</p></div>
+</div>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 3] — 14:00 a 15:00. Cerrar respondiendo la pregunta inicial: detectamos degradaciones con RED, alertas por percentiles y por tasa de errores con ventana de tiempo. Próximos pasos posibles: alertas por error budget (burn rate), Alertmanager y trazas con OpenTelemetry.</aside>
+</section>

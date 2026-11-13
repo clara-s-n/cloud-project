@@ -1,0 +1,12 @@
+<section id="media" class="dark">
+<p class="eyebrow">Hallazgo · Escenario de latencia</p>
+<h2>El promedio no alcanza el umbral: el percentil sí</h2>
+<div class="row" style="gap:28px;">
+<div class="card in" style="--i:0;"><p class="tag">Mediana p50</p><p class="big blue">23 ms</p><p class="body">Antes, 19 ms. Prácticamente sin cambios.</p></div>
+<div class="card in" style="--i:1;"><p class="tag">Media</p><p class="big blue">312 ms</p><p class="body">Por debajo del umbral de 500 ms: una alerta por promedio no se dispara.</p></div>
+<div class="card hl in" style="--i:2;"><p class="tag">p95</p><p class="big accent">1,4 s</p><p class="body">27 veces la línea base. La alerta se dispara a los 75 s.</p></div>
+</div>
+<p class="lead" style="font-size:32px;">Uno de cada cuatro usuarios esperaba más de un segundo. El heatmap muestra dos franjas: una distribución bimodal que ningún número resume por sí solo.</p>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 3] — 8:30 a 9:00. Este es el hallazgo central. Si hubiéramos configurado la alerta sobre la media con el mismo umbral de 500 ms, nunca habría sonado. La mediana describe al usuario típico, que no se vio afectado. Los percentiles altos describen a los afectados.</aside>
+</section>

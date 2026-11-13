@@ -1,0 +1,10 @@
+<section id="errores" class="alt">
+<p class="eyebrow">Hallazgos · Escenario de errores y precisión</p>
+<h2>Fallar rápido parece ir más rápido</h2>
+<div class="row" style="gap:28px;">
+<div class="card"><p class="tag">Latencia media</p><p class="big blue" style="font-size:80px;">22 → 18,5 ms</p><p class="body">Con 12 % de errores la latencia bajó: los 500 responden sin hacer el trabajo. Por eso la latencia siempre se lee junto a la tasa de errores.</p></div>
+<div class="card"><p class="tag">Precisión del histograma</p><p class="big blue" style="font-size:80px;">61 → 91 ms</p><p class="body">El p99 real (k6) frente al estimado por Prometheus en el escenario normal: la interpolación dentro del bucket 50–100 ms. Cerca del umbral, con buckets densos, el error fue menor al 1 %.</p></div>
+</div>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 3] — 9:00 a 9:30. Dos observaciones críticas. (1) Un servicio que devuelve errores rápidos mejora la latencia media: un dashboard solo de latencia diría que todo va mejor. (2) Los percentiles de Prometheus son estimaciones. Donde los buckets son anchos el error es grande (+49 % en el p99 normal), y donde son densos es mínimo. Hay que diseñar los buckets alrededor del umbral que importa, o usar los native histograms de Prometheus 3.</aside>
+</section>

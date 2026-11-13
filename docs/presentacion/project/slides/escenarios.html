@@ -1,0 +1,16 @@
+<section id="escenarios" class="alt">
+<p class="eyebrow">Diseño experimental</p>
+<h2>Tres escenarios, la misma carga</h2>
+<table class="data">
+<tr><th style="width:22%;">Escenario</th><th style="width:40%;">Fallo inyectado</th><th style="width:38%;">Lo que esperamos ver</th></tr>
+<tr><td>1. Normal</td><td>Ninguno</td><td>Línea base</td></tr>
+<tr style="background:#F6D9C4;"><td>2. Latencia</td><td>25 % de las peticiones tarda 1,2 s más (±25 %)</td><td>Suben p95 y p99; la mediana casi no cambia</td></tr>
+<tr style="background:#D5E3F3;"><td>3. Errores</td><td>12 % de las peticiones responde 500</td><td>Sube la tasa de 5xx; la latencia sigue normal</td></tr>
+</table>
+<div class="row" style="margin-top:8px;">
+<div class="card"><p class="tag">Carga (k6)</p><p class="body">30 req/s durante 2 min 30 s. 60 % listado, 25 % detalle (con algunos 404), 15 % pedidos.</p></div>
+<div class="card"><p class="tag">Umbrales (SLO de laboratorio)</p><p class="body">Errores 5xx &lt; 5 % y latencia p95 &lt; 500 ms, ambos sostenidos durante 1 minuto.</p></div>
+</div>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 2] — 7:00 a 7:45. Presentar la tabla. Por qué elegimos 25 % y 12 %: son degradaciones parciales, realistas (un nodo de base de datos lento, una dependencia que falla a veces), no una caída total. Los umbrales tienen una ventana “for: 1m” para no alertar por un pico aislado.</aside>
+</section>

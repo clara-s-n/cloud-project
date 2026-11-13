@@ -1,0 +1,75 @@
+# Reglas de la PoC.
+# - Recording rules: precalculan las señales RED de la API (solo rutas de negocio /api/*).
+# - Alerting rules: definen qué consideramos "degradación".
+#
+# Objetivos (SLO de laboratorio):
+#   * Tasa de errores 5xx  < 5 %
+#   * Latencia p95         < 500 ms
+groups:
+  - name: api-red-signals
+    interval: 5s
+    rules:
+      - record: api:requests:rate1m
+        expr: sum(rate(http_requests_total{job="demo-api", route=~"/api/.*"}[1m]))
+
+      - record: api:errors_5xx:ratio_rate1m
+        expr: |
+          # "or vector(0)": si aún no hubo ningún 5xx la serie no existe y el
+          # cociente quedaría vacío en lugar de 0.
+          (sum(rate(http_requests_total{job="demo-api", route=~"/api/.*", status_code=~"5.."}[1m])) or vector(0))
+          /
+          sum(rate(http_requests_total{job="demo-api", route=~"/api/.*"}[1m]))
+
+      - record: api:latency_seconds:p95_rate1m
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le) (rate(http_request_duration_seconds_bucket{job="demo-api", route=~"/api/.*"}[1m])))
+
+      - record: api:latency_seconds:avg_rate1m
+        expr: |
+          sum(rate(http_request_duration_seconds_sum{job="demo-api", route=~"/api/.*"}[1m]))
+          /
+          sum(rate(http_request_duration_seconds_count{job="demo-api", route=~"/api/.*"}[1m]))
+
+  - name: api-alerts
+    rules:
+      # Caída total: Prometheus no puede hacer scrape. Es lo único que detectaría
+      # un monitoreo de disponibilidad clásico.
+      - alert: ApiCaida
+        expr: up{job="demo-api"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: La API no responde al scrape de Prometheus
+          description: El target {{ $labels.instance }} lleva más de 30 s caído.
+
+      # Degradación por errores: la API responde, pero mal.
+      - alert: ApiTasaErroresAlta
+        expr: api:errors_5xx:ratio_rate1m > 0.05
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Tasa de errores 5xx por encima del 5 %
+          description: 'Tasa de errores actual: {{ $value | humanizePercentage }}'
+
+      # Degradación por latencia: la API responde 200, pero lento.
+      - alert: ApiLatenciaP95Alta
+        expr: api:latency_seconds:p95_rate1m > 0.5
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Latencia p95 por encima de 500 ms
+          description: 'p95 actual: {{ $value | humanizeDuration }}'
+
+      # Señal complementaria: caída brusca de tráfico (p. ej. clientes que abandonan
+      # o un balanceador que dejó de enviar peticiones).
+      - alert: ApiSinTrafico
+        expr: api:requests:rate1m < 1 and up{job="demo-api"} == 1
+        for: 2m
+        labels:
+          severity: info
+        annotations:
+          summary: La API está arriba pero casi no recibe tráfico

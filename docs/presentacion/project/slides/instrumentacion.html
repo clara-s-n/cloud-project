@@ -1,0 +1,13 @@
+<section id="instrumentacion">
+<p class="eyebrow">Instrumentación</p>
+<h2>Un middleware, dos métricas, tres etiquetas</h2>
+<div class="row" style="gap:48px;">
+<div class="code" style="flex:1.25;"><p class="c" style="font-size:24px;">// al terminar cada respuesta</p><p style="font-size:24px;">res.on(<span class="k">'finish'</span>, () =&gt; {</p><p style="font-size:24px;">&#160;&#160;<span class="k">const</span> route = req.route</p><p style="font-size:24px;">&#160;&#160;&#160;&#160;? req.baseUrl + req.route.path <span class="c">// /api/products/:id</span></p><p style="font-size:24px;">&#160;&#160;&#160;&#160;: <span class="k">'unmatched'</span>;</p><p style="font-size:24px;">&#160;&#160;labels = { method, route, status_code };</p><p style="font-size:24px;">&#160;&#160;httpRequestsTotal.inc(labels);</p><p style="font-size:24px;">&#160;&#160;httpRequestDuration.observe(labels, secs);</p><p style="font-size:24px;">});</p></div>
+<div class="col" style="flex:1;">
+<div class="card"><p class="tag">Cardinalidad</p><p class="body">La etiqueta lleva la plantilla <span class="mono">/products/:id</span>, no la URL real. Con la URL, cada id crearía una serie nueva.</p></div>
+<div class="card hl"><p class="tag">Error que encontramos</p><p class="body">Los 500 inyectados salían como <span class="mono">route="unmatched"</span> y el filtro <span class="mono">/api/.*</span> los ignoraba: la alerta de errores nunca se disparaba.</p></div>
+</div>
+</div>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 2] — 5:45 a 7:00. Explicar el middleware. Dos lecciones. (1) Cardinalidad: cada combinación de etiquetas es una serie temporal en memoria; nunca poner ids, usuarios ni URLs completas. (2) Contar el bug real: en la primera corrida el escenario de errores devolvía 12 % de 500, k6 lo veía, pero Prometheus mostraba 0 %, porque el middleware de caos respondía antes de que Express resolviera la ruta. La observabilidad también puede fallar en silencio: hay que validar las métricas contra una fuente independiente (aquí, k6).</aside>
+</section>

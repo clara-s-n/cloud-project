@@ -1,0 +1,16 @@
+<section id="resultados">
+<p class="eyebrow">Resultados medidos · 2 min 30 s por escenario · ≈4 500 peticiones cada uno</p>
+<h2>La disponibilidad no vio nada. RED vio las dos degradaciones.</h2>
+<table class="data">
+<tr><th style="width:31%;">Señal</th><th style="width:23%;">Normal</th><th style="width:23%;">Latencia</th><th style="width:23%;">Errores</th></tr>
+<tr><td>up · /health</td><td>1 · 200</td><td>1 · 200</td><td>1 · 200</td></tr>
+<tr><td>Tráfico</td><td>30 req/s</td><td>30 req/s</td><td>30 req/s</td></tr>
+<tr><td>Errores 5xx</td><td>0 %</td><td>0 %</td><td>12 %</td></tr>
+<tr><td>Latencia p50</td><td>19 ms</td><td>23 ms</td><td>17 ms</td></tr>
+<tr><td>Latencia p95</td><td>52 ms</td><td>1 400 ms</td><td>47 ms</td></tr>
+<tr><td>Alerta</td><td>ninguna</td><td>p95 · a los 75 s</td><td>errores · a los 85 s</td></tr>
+</table>
+<p class="small">Valores de k6 (cliente). Prometheus coincidió: p95 1 390 ms y 11 % de errores en la ventana de 1 min.</p>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 3] — 7:45 a 8:30. Leer por filas: las dos primeras no cambian en ningún escenario, eso es lo que ve un monitoreo de disponibilidad. Las siguientes cambian cada una en un solo escenario: errores solo en el 3, latencia solo en el 2. Las alertas tardan 75–85 s porque exigimos que la condición se mantenga 1 minuto (for: 1m) y la ventana de rate necesita llenarse. k6 mide del lado del cliente y nos sirvió para validar a Prometheus.</aside>
+</section>

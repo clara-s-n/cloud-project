@@ -1,0 +1,11 @@
+<section id="pregunta">
+<p class="eyebrow">Pregunta de investigación</p>
+<h2 style="max-width:1600px;">¿Cómo detectamos que una API tiene problemas de rendimiento o errores aunque siga disponible?</h2>
+<div class="row" style="margin-top:24px;">
+<div class="card in" style="--i:0;"><p class="tag">Hipótesis</p><p class="body">Las métricas de tráfico, latencia (en percentiles) y tasa de errores detectan degradaciones que un health check no ve.</p></div>
+<div class="card in" style="--i:1;"><p class="tag">Método</p><p class="body">PoC local con Docker Compose: API instrumentada, Prometheus, Grafana y tres escenarios de carga controlados con k6.</p></div>
+<div class="card in" style="--i:2;"><p class="tag">Fuera de alcance</p><p class="body">Kubernetes, alta disponibilidad, Alertmanager, trazas y logs. Un solo servicio, observado de punta a punta.</p></div>
+</div>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 1] — 1:30 a 2:15. Leer la pregunta. Aclarar el alcance: no monitoreamos infraestructura completa, sino un servicio, que es la unidad donde el usuario percibe la degradación.</aside>
+</section>

@@ -1,0 +1,12 @@
+<section id="senales" class="alt">
+<p class="eyebrow">Marco teórico</p>
+<h2>Tres señales describen la salud de un servicio: método RED</h2>
+<div class="row">
+<div class="card in" style="--i:0;"><p class="big blue">R</p><h3>Rate</h3><p class="body">Peticiones por segundo. Contexto: ¿cuánto se está usando?</p><p class="small mono">rate(http_requests_total[1m])</p></div>
+<div class="card in" style="--i:1;"><p class="big accent">E</p><h3>Errors</h3><p class="body">Proporción de peticiones fallidas (5xx). Los 4xx van aparte: suelen ser error del cliente.</p><p class="small mono">5xx / total</p></div>
+<div class="card in" style="--i:2;"><p class="big blue">D</p><h3>Duration</h3><p class="body">Distribución de la latencia en percentiles (p50, p95, p99), no en promedio.</p><p class="small mono">histogram_quantile(0.95, …)</p></div>
+</div>
+<p class="small">RED (Tom Wilkie) es la versión orientada a servicios de las cuatro “Golden Signals” de Google SRE, que agregan saturación. El método USE (Brendan Gregg) se aplica a recursos: CPU, disco, red.</p>
+<div class="footer"><span>Proyecto final · Cloud Computing</span><span class="num"></span></div>
+<aside>[Integrante 1] — 2:15 a 3:30. Explicar RED. Remarcar que un health check solo ve “disponible o no”, mientras que RED da tres dimensiones continuas. Mencionar la relación con las Golden Signals (latencia, tráfico, errores, saturación) y con USE para recursos. En el dashboard también mostramos saturación (peticiones en curso, event loop).</aside>
+</section>

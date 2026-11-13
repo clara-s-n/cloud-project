@@ -1,0 +1,21 @@
+{
+  "v": 5,
+  "createdOnFiles": { "v": 1, "at": "2026-11-12T23:45:00Z" },
+  "lists": "css",
+  "format": { "v": 1, "shared": ["project/deck.css"] },
+  "title": "Detección de degradaciones en una API con Prometheus y Grafana",
+  "order": ["cover", "problema", "pregunta", "senales", "prometheus", "arquitectura", "instrumentacion", "escenarios", "resultados", "media", "errores", "demo", "tradeoffs", "conclusiones", "referencias"],
+  "sections": {
+    "s1": { "description": "El problema: una API disponible no es una API sana.", "start": "cover" },
+    "s2": { "description": "Marco teórico: señales RED y el modelo de Prometheus.", "start": "senales" },
+    "s3": { "description": "La PoC: arquitectura, instrumentación y escenarios.", "start": "arquitectura" },
+    "s4": { "description": "Resultados medidos y demostración en vivo.", "start": "resultados" },
+    "s5": { "description": "Análisis crítico, conclusiones y referencias.", "start": "tradeoffs" }
+  },
+  "cover": "cover",
+  "faces": {
+    "ibm-plex-sans": { "family": "IBM Plex Sans", "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" },
+    "jetbrains-mono": { "family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" }
+  },
+  "designSystems": []
+}

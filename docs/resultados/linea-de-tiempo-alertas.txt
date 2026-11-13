@@ -1,0 +1,13 @@
+23:46:29 UTC  alerta ApiTasaErroresAlta -> FIRING
+23:46:29 UTC  escenario -> errors
+23:47:59 UTC  escenario -> normal
+23:51:24 UTC  escenario -> latency
+23:51:39 UTC  alerta ApiLatenciaP95Alta -> PENDING
+23:52:34 UTC  alerta ApiLatenciaP95Alta (pending) visto por última vez
+23:52:39 UTC  alerta ApiLatenciaP95Alta -> FIRING
+23:53:59 UTC  escenario -> errors
+23:54:24 UTC  alerta ApiTasaErroresAlta -> PENDING
+23:54:44 UTC  alerta ApiLatenciaP95Alta (firing) visto por última vez
+23:55:19 UTC  alerta ApiTasaErroresAlta (pending) visto por última vez
+23:55:24 UTC  alerta ApiTasaErroresAlta -> FIRING
+23:56:29 UTC  alerta ApiTasaErroresAlta (firing) visto por última vez
