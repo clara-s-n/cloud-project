@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Póster · Disponible no significa sano</title>
+<style>
+@page { size: 297mm 420mm; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 297mm; height: 420mm; }
+body { font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; color: #141A26; background: #F6F4EF;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 1123px; height: 1587px; display: flex; flex-direction: column; overflow: hidden; }
+svg text { font-family: 'Open Sans', Arial, sans-serif; }
+.ax { font-size: 14px; fill: #5B6475; }
+.cat { font-size: 16px; font-weight: 700; fill: #141A26; }
+.cat.sm { font-size: 14px; }
+.val { font-size: 14px; fill: #3A4354; }
+.lbl { font-size: 14px; fill: #141A26; }
+.b { font-weight: 700; fill: #141A26; }
+.num { font-size: 17px; font-weight: 800; fill: #fff; }
+.step { font-size: 15px; font-weight: 700; fill: #eb6834; letter-spacing: .5px; text-transform: uppercase; }
+.box { font-size: 25px; font-weight: 800; }
+.desc { font-size: 15px; }
+
+header { background: #141A26; color: #F6F4EF; padding: 24px 40px 18px; }
+.eyebrow { font-size: 15px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #F09A63; }
+h1 { font-size: 86px; line-height: 1; font-weight: 800; letter-spacing: -3px; margin: 8px 0 8px; }
+h1 .ne { color: #F09A63; }
+.subtitle { font-size: 23px; line-height: 1.25; color: #D5DBE5; }
+.authors { margin-top: 10px; font-size: 18px; color: #B7C0CE; display: flex; justify-content: space-between; }
+.authors b { color: #F6F4EF; }
+
+main { flex: 1; padding: 12px 40px 10px; display: flex; flex-direction: column; gap: 10px; }
+h2 { font-size: 25px; font-weight: 800; letter-spacing: -.3px; display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+h2 .n { width: 32px; height: 32px; border-radius: 50%; background: #eb6834; color: #fff; font-size: 17px;
+  display: inline-flex; align-items: center; justify-content: center; }
+h3 { font-size: 14px; font-weight: 700; color: #5B6475; text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 4px; }
+p { font-size: 17px; line-height: 1.4; }
+.card { background: #FBFAF7; border: 2px solid #E2DDD2; border-radius: 14px; padding: 14px 18px; }
+
+.obj { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+.q { font-size: 20px; line-height: 1.28; font-weight: 700; }
+.hyp { margin-top: 6px; font-size: 15.5px; }
+.versus { display: grid; grid-template-columns: 1fr 1fr; padding: 0; overflow: hidden; }
+.versus > div { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.mon { background: #E6F1EA; }
+.usr { background: #FBE6DA; }
+.pillok { align-self: flex-start; background: #1E7F4F; color: #fff; font-weight: 800; font-size: 20px; padding: 4px 14px; border-radius: 999px; }
+.small { font-size: 15px; line-height: 1.35; color: #5B6475; }
+
+.chips { display: flex; gap: 10px; margin-top: 8px; }
+.chip { flex: 1; border-radius: 10px; padding: 7px 12px; white-space: nowrap; border: 2px solid #E2DDD2; background: #FBFAF7; font-size: 15px; color: #5B6475; }
+.chip b { color: #141A26; font-size: 16px; }
+.chip.l { border-color: #1baf7a; }
+.chip.e { border-color: #eb6834; }
+
+.res { display: grid; grid-template-columns: 1.5fr 0.95fr 1.3fr; gap: 12px; }
+.legend { display: flex; gap: 14px; font-size: 14px; color: #3A4354; margin: 2px 0 0; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+table.m { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.m th { text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #5B6475; padding: 0 4px 6px; }
+table.m td { padding: 6px 4px; border-top: 1.5px solid #E2DDD2; vertical-align: middle; line-height: 1.2; }
+table.m tr:last-child td { border-top: 2px solid #3A4354; }
+table.m .sub { font-size: 13px; color: #5B6475; }
+.mk { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #1E7F4F; white-space: nowrap; }
+.mk.no { color: #8A93A3; font-weight: 600; }
+
+.find { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.find .card { padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+.find .k { font-size: 34px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; color: #eb6834; }
+.find .card.dark { background: #141A26; border-color: #141A26; color: #F6F4EF; }
+.find .card.dark .small { color: #C8CFDA; }
+.find .card.dark .k { color: #F09A63; }
+.find .t { font-size: 15.5px; font-weight: 800; line-height: 1.25; }
+
+.concl { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }
+ul { padding-left: 20px; font-size: 15.5px; line-height: 1.35; }
+li { margin-bottom: 3px; }
+.tradeoff { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px 14px; font-size: 14px; line-height: 1.38; }
+.tradeoff b { display: block; font-size: 15px; margin-bottom: 3px; }
+
+footer { background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; align-items: center; }
+.refs { flex: 1; font-size: 12.5px; line-height: 1.45; color: #3A4354; }
+.qr { width: 84px; height: 84px; background: #fff; padding: 7px; border-radius: 8px; flex: none; }
+.qrtxt { font-size: 13.5px; color: #3A4354; width: 175px; line-height: 1.35; }
+</style></head>
+<body><div class="page">
+
+<header>
+  <p class="eyebrow">Proyecto final · Electiva Cloud Computing · CNCF — Observabilidad</p>
+  <h1>Disponible <span class="ne">≠</span> sano</h1>
+  <p class="subtitle">Detección de degradaciones en una API mediante monitoreo con Prometheus y Grafana</p>
+  <div class="authors"><b>[Nombre Apellido 1] · [Nombre Apellido 2] · [Nombre Apellido 3]</b><span>Noviembre 2026</span></div>
+</header>
+
+<main>
+<section>
+  <h2><span class="n">1</span>Objetivo e hipótesis</h2>
+  <div class="obj">
+    <div class="card">
+      <p class="q">¿Cómo detectamos que una API tiene problemas de rendimiento o errores <u>aunque siga disponible</u>?</p>
+      <p class="hyp"><b>Hipótesis:</b> las señales <b>RED</b> (<b>R</b>ate: tráfico · <b>E</b>rrors: tasa de errores · <b>D</b>uration: latencia en percentiles) revelan degradaciones que un health check no ve.</p>
+    </div>
+    <div class="card versus">
+      <div class="mon"><h3>El monitor ve</h3><span class="pillok">200 OK · ARRIBA</span>
+        <p class="small">El health check solo pregunta “¿responde?”.</p></div>
+      <div class="usr"><h3>El usuario vive</h3><svg viewBox="0 0 250 92" width="150" role="img" aria-label="Uno de cada cuatro usuarios afectado"><circle cx="32" cy="22" r="15" fill="#9AA3B2"/><path d="M7,90 Q7,44 32,44 Q57,44 57,90 Z" fill="#9AA3B2"/><circle cx="94" cy="22" r="15" fill="#9AA3B2"/><path d="M69,90 Q69,44 94,44 Q119,44 119,90 Z" fill="#9AA3B2"/><circle cx="156" cy="22" r="15" fill="#9AA3B2"/><path d="M131,90 Q131,44 156,44 Q181,44 181,90 Z" fill="#9AA3B2"/><circle cx="218" cy="22" r="15" fill="#eb6834"/><path d="M193,90 Q193,44 218,44 Q243,44 243,90 Z" fill="#eb6834"/></svg>
+        <p class="small"><b style="color:#141A26">1 de cada 4</b> espera más de 1 s.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">2</span>Metodología: laboratorio reproducible con Docker Compose</h2>
+  <svg viewBox="0 0 1043 150" width="100%" role="img" aria-label="Flujo de la prueba de concepto: k6, API, Prometheus, Grafana"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#eb6834"/></marker></defs><rect x="3" y="28" width="222" height="118" rx="12" fill="#FBFAF7" stroke="#CFC8BA" stroke-width="2"/><circle cx="23" cy="28" r="16" fill="#eb6834"/><text x="23" y="34" text-anchor="middle" class="num">1</text><text x="47" y="20" class="step">Generar carga</text><text x="21" y="78" class="box" fill="#141A26">k6</text><text x="21" y="106" class="desc" fill="#5B6475">30 req/s constantes,</text><text x="21" y="126" class="desc" fill="#5B6475">igual en los 3 escenarios</text><line x1="231" x2="268" y1="87" y2="87" stroke="#eb6834" stroke-width="3" marker-end="url(#ah)"/><rect x="275" y="28" width="222" height="118" rx="12" fill="#141A26" stroke="#141A26" stroke-width="2"/><circle cx="295" cy="28" r="16" fill="#eb6834"/><text x="295" y="34" text-anchor="middle" class="num">2</text><text x="319" y="20" class="step">Instrumentar</text><text x="293" y="78" class="box" fill="#F6F4EF">API Node.js</text><text x="293" y="106" class="desc" fill="#B7C0CE">prom-client expone</text><text x="293" y="126" class="desc" fill="#B7C0CE">Rate, Errors y Duration</text><line x1="503" x2="540" y1="87" y2="87" stroke="#eb6834" stroke-width="3" marker-end="url(#ah)"/><rect x="547" y="28" width="222" height="118" rx="12" fill="#FBFAF7" stroke="#eb6834" stroke-width="3"/><circle cx="567" cy="28" r="16" fill="#eb6834"/><text x="567" y="34" text-anchor="middle" class="num">3</text><text x="591" y="20" class="step">Recolectar y alertar</text><text x="565" y="78" class="box" fill="#141A26">Prometheus</text><text x="565" y="106" class="desc" fill="#5B6475">scrape cada 5 s · alertas:</text><text x="565" y="126" class="desc" fill="#5B6475">p95 > 500 ms, 5xx > 5 %</text><line x1="775" x2="812" y1="87" y2="87" stroke="#eb6834" stroke-width="3" marker-end="url(#ah)"/><rect x="819" y="28" width="222" height="118" rx="12" fill="#FBFAF7" stroke="#CFC8BA" stroke-width="2"/><circle cx="839" cy="28" r="16" fill="#eb6834"/><text x="839" y="34" text-anchor="middle" class="num">4</text><text x="863" y="20" class="step">Visualizar</text><text x="837" y="78" class="box" fill="#141A26">Grafana</text><text x="837" y="106" class="desc" fill="#5B6475">dashboard RED</text><text x="837" y="126" class="desc" fill="#5B6475">provisionado como código</text></svg>
+  <div class="chips">
+    <div class="chip"><b>1 · Normal:</b> sin fallos</div>
+    <div class="chip l"><b>2 · Latencia:</b> 25 % tarda +1,2 s</div>
+    <div class="chip e"><b>3 · Errores:</b> 12 % responde 500</div>
+    <div class="chip"><b>Igual carga:</b> 2 min 30 s c/u</div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">3</span>Resultados</h2>
+  <div class="res">
+    <div class="card">
+      <h3>Latencia (ms)</h3>
+      <div class="legend"><span><i style="background:#2a78d6"></i>mediana p50</span><span><i style="background:#1baf7a"></i>media</span><span><i style="background:#eb6834"></i>p95</span></div>
+      <svg viewBox="0 0 470 290" width="100%" role="img" aria-label="Latencia p50, media y p95 por escenario frente al umbral de 500 ms"><line x1="52" x2="462" y1="248.0" y2="248.0" stroke="#D9D5CC"/><text x="44" y="253.0" text-anchor="end" class="ax">0</text><line x1="52" x2="462" y1="181.1" y2="181.1" stroke="#D9D5CC"/><text x="44" y="186.1" text-anchor="end" class="ax">500</text><line x1="52" x2="462" y1="114.2" y2="114.2" stroke="#D9D5CC"/><text x="44" y="119.2" text-anchor="end" class="ax">1.000</text><line x1="52" x2="462" y1="47.4" y2="47.4" stroke="#D9D5CC"/><text x="44" y="52.4" text-anchor="end" class="ax">1.500</text><text x="44" y="16" text-anchor="end" class="ax">ms</text><line x1="52" x2="462" y1="181.1" y2="181.1" stroke="#141A26" stroke-width="2" stroke-dasharray="7 5"/><text x="56" y="173.1" class="lbl b">umbral de alerta 500 ms</text><rect x="67.3" y="245.5" width="34" height="2.5" fill="#2a78d6"/><text x="84.3" y="238.5" text-anchor="middle" class="val">19</text><rect x="103.3" y="245.1" width="34" height="2.9" fill="#1baf7a"/><text x="120.3" y="238.1" text-anchor="middle" class="val">22</text><path d="M139.3,248 V245.0 Q139.3,241.0 143.3,241.0 H169.3 Q173.3,241.0 173.3,245.0 V248 Z" fill="#eb6834"/><text x="156.3" y="234.0" text-anchor="middle" class="val">52</text><text x="120.3" y="274" text-anchor="middle" class="cat">Normal</text><rect x="204.0" y="244.9" width="34" height="3.1" fill="#2a78d6"/><text x="221.0" y="237.9" text-anchor="middle" class="val">23</text><path d="M240.0,248 V210.3 Q240.0,206.3 244.0,206.3 H270.0 Q274.0,206.3 274.0,210.3 V248 Z" fill="#1baf7a"/><text x="257.0" y="199.3" text-anchor="middle" class="val b">312</text><path d="M276.0,248 V64.8 Q276.0,60.8 280.0,60.8 H306.0 Q310.0,60.8 310.0,64.8 V248 Z" fill="#eb6834"/><text x="293.0" y="53.8" text-anchor="middle" class="val b">1,4 s</text><text x="257.0" y="274" text-anchor="middle" class="cat">Latencia</text><rect x="340.7" y="245.7" width="34" height="2.3" fill="#2a78d6"/><text x="357.7" y="238.7" text-anchor="middle" class="val">17</text><rect x="376.7" y="245.5" width="34" height="2.5" fill="#1baf7a"/><text x="393.7" y="238.5" text-anchor="middle" class="val">18,5</text><path d="M412.7,248 V245.7 Q412.7,241.7 416.7,241.7 H442.7 Q446.7,241.7 446.7,245.7 V248 Z" fill="#eb6834"/><text x="429.7" y="234.7" text-anchor="middle" class="val">47</text><text x="393.7" y="274" text-anchor="middle" class="cat">Errores</text><line x1="52" x2="462" y1="248" y2="248" stroke="#3A4354" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card">
+      <h3>Errores 5xx</h3>
+      <div class="legend"><span><i style="background:#eb6834"></i>% de peticiones</span></div>
+      <svg viewBox="0 0 250 268" width="100%" role="img" aria-label="Tasa de errores 5xx por escenario frente al umbral del 5 %"><line x1="40" x2="244" y1="226.0" y2="226.0" stroke="#D9D5CC"/><text x="33" y="231.0" text-anchor="end" class="ax">0%</text><line x1="40" x2="244" y1="162.0" y2="162.0" stroke="#D9D5CC"/><text x="33" y="167.0" text-anchor="end" class="ax">5%</text><line x1="40" x2="244" y1="98.0" y2="98.0" stroke="#D9D5CC"/><text x="33" y="103.0" text-anchor="end" class="ax">10%</text><line x1="40" x2="244" y1="34.0" y2="34.0" stroke="#D9D5CC"/><text x="33" y="39.0" text-anchor="end" class="ax">15%</text><text x="33" y="16" text-anchor="end" class="ax">5xx</text><line x1="40" x2="244" y1="162.0" y2="162.0" stroke="#141A26" stroke-width="2" stroke-dasharray="7 5"/><text x="44" y="154.0" class="lbl b">umbral 5 %</text><text x="74.0" y="219.0" text-anchor="middle" class="val">0 %</text><text x="74.0" y="252" text-anchor="middle" class="cat sm">Normal</text><text x="142.0" y="219.0" text-anchor="middle" class="val">0 %</text><text x="142.0" y="252" text-anchor="middle" class="cat sm">Latencia</text><path d="M188.0,226 V77.0 Q188.0,73.0 192.0,73.0 H228.0 Q232.0,73.0 232.0,77.0 V226 Z" fill="#eb6834"/><text x="210.0" y="66.0" text-anchor="middle" class="val b">12 %</text><text x="210.0" y="252" text-anchor="middle" class="cat sm">Errores</text><line x1="40" x2="244" y1="226" y2="226" stroke="#3A4354" stroke-width="1.5"/></svg>
+    </div>
+    <div class="card">
+      <h3>¿Qué señal detectó cada fallo?</h3>
+      <table class="m"><tr><th style="width:40%">Señal</th><th>Latencia</th><th>Errores</th></tr><tr><td><b>Disponibilidad</b> <span class="sub">up · /health</span></td><td><span class="mk no">— igual</span></td><td><span class="mk no">— igual</span></td></tr><tr><td><b>Rate</b> <span class="sub">req/s</span></td><td><span class="mk no">— igual</span></td><td><span class="mk no">— igual</span></td></tr><tr><td><b>Errors</b> <span class="sub">% 5xx</span></td><td><span class="mk no">— igual</span></td><td><span class="mk"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="11" fill="#1E7F4F"/><path d="M6.5 12.5 L10.5 16 L17.5 8.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>12 %</span></td></tr><tr><td><b>Duration</b> <span class="sub">p95</span></td><td><span class="mk"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="11" fill="#1E7F4F"/><path d="M6.5 12.5 L10.5 16 L17.5 8.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>1,4 s</span></td><td><span class="mk no">— igual</span></td></tr><tr><td><b>Alerta</b> <span class="sub">sostenida 1 min</span></td><td><span class="mk"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="11" fill="#1E7F4F"/><path d="M6.5 12.5 L10.5 16 L17.5 8.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>75 s</span></td><td><span class="mk"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="11" fill="#1E7F4F"/><path d="M6.5 12.5 L10.5 16 L17.5 8.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>85 s</span></td></tr></table>
+      <p class="small" style="margin-top:8px;"><b style="color:#141A26">Disponibilidad nunca cambió.</b> Cada fallo lo detectó una señal distinta.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">4</span>Hallazgos</h2>
+  <div class="find">
+    <div class="card"><p class="k">×27</p><p class="t">El p95 se disparó; la mediana, no</p><p class="small">p95: 52 ms → 1,4 s. Mediana: 19 → 23 ms.</p></div>
+    <div class="card dark"><p class="k">312 ms</p><p class="t">La media no llegó al umbral de 500 ms</p><p class="small">Una alerta por promedio nunca habría sonado.</p></div>
+    <div class="card"><p class="k">−16 %</p><p class="t">Con errores, la latencia “mejoró”</p><p class="small">Los 500 responden enseguida: fallar rápido parece ir rápido.</p></div>
+    <div class="card"><p class="k">12 % vs 0 %</p><p class="t">Un bug ocultaba los errores</p><p class="small">Etiqueta <i>route</i> mal asignada: k6 veía 12 %, Prometheus 0 %.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">5</span>Conclusiones</h2>
+  <div class="concl">
+    <ul>
+      <li><b>Hipótesis confirmada:</b> ambas degradaciones se detectaron en menos de 90 s con la API “disponible”.</li>
+      <li><b>Alertar por percentiles y tasa de errores</b>, nunca por promedio ni por estado binario.</li>
+      <li><b>Validar la instrumentación:</b> etiquetas correctas, cardinalidad acotada, buckets cerca del umbral.</li>
+    </ul>
+    <div class="card tradeoff">
+      <div><b style="color:#1E7F4F">A favor</b>Estándar abierto (CNCF), PromQL potente, detección de caídas incluida (pull), todo como código.</div>
+      <div><b style="color:#D63A39">Limitaciones</b>Percentiles aproximados, un solo nodo, cardinalidad delicada. Dicen <i>qué</i> y <i>dónde</i>, no <i>por qué</i>.</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="refs"><b>Referencias.</b> Beyer et al. (2016) <i>Site Reliability Engineering</i>, cap. 6, O’Reilly ·
+  Wilkie (2018) <i>The RED Method</i>, Grafana Labs · Gregg (2013) <i>The USE Method</i> ·
+  Prometheus Authors, <i>Documentation</i> · CNCF (2018) <i>Prometheus graduation</i> ·
+  Tene (2015) <i>How NOT to Measure Latency</i>.<br>
+  <b>Herramientas.</b> Node.js · Express · prom-client · Prometheus 3.5 · Grafana 12.1 · k6 1.3 · Docker Compose.</div>
+  <div class="qrtxt"><b>Código, datos y demo</b><br>Escanea para ver el repositorio y reproducir el laboratorio.</div>
+  <div class="qr"><svg width="100%" height="100%" version="1.1" viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg"><path d="M0,0H1V1H0zM1,0H2V1H1zM2,0H3V1H2zM3,0H4V1H3zM4,0H5V1H4zM5,0H6V1H5zM6,0H7V1H6zM8,0H9V1H8zM11,0H12V1H11zM13,0H14V1H13zM17,0H18V1H17zM22,0H23V1H22zM23,0H24V1H23zM24,0H25V1H24zM25,0H26V1H25zM26,0H27V1H26zM27,0H28V1H27zM28,0H29V1H28zM0,1H1V2H0zM6,1H7V2H6zM9,1H10V2H9zM10,1H11V2H10zM11,1H12V2H11zM12,1H13V2H12zM13,1H14V2H13zM17,1H18V2H17zM20,1H21V2H20zM22,1H23V2H22zM28,1H29V2H28zM0,2H1V3H0zM2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM6,2H7V3H6zM8,2H9V3H8zM10,2H11V3H10zM12,2H13V3H12zM13,2H14V3H13zM14,2H15V3H14zM15,2H16V3H15zM16,2H17V3H16zM17,2H18V3H17zM18,2H19V3H18zM19,2H20V3H19zM20,2H21V3H20zM22,2H23V3H22zM24,2H25V3H24zM25,2H26V3H25zM26,2H27V3H26zM28,2H29V3H28zM0,3H1V4H0zM2,3H3V4H2zM3,3H4V4H3zM4,3H5V4H4zM6,3H7V4H6zM10,3H11V4H10zM13,3H14V4H13zM14,3H15V4H14zM16,3H17V4H16zM17,3H18V4H17zM18,3H19V4H18zM22,3H23V4H22zM24,3H25V4H24zM25,3H26V4H25zM26,3H27V4H26zM28,3H29V4H28zM0,4H1V5H0zM2,4H3V5H2zM3,4H4V5H3zM4,4H5V5H4zM6,4H7V5H6zM10,4H11V5H10zM11,4H12V5H11zM14,4H15V5H14zM17,4H18V5H17zM18,4H19V5H18zM22,4H23V5H22zM24,4H25V5H24zM25,4H26V5H25zM26,4H27V5H26zM28,4H29V5H28zM0,5H1V6H0zM6,5H7V6H6zM8,5H9V6H8zM9,5H10V6H9zM13,5H14V6H13zM14,5H15V6H14zM16,5H17V6H16zM22,5H23V6H22zM28,5H29V6H28zM0,6H1V7H0zM1,6H2V7H1zM2,6H3V7H2zM3,6H4V7H3zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM10,6H11V7H10zM12,6H13V7H12zM14,6H15V7H14zM16,6H17V7H16zM18,6H19V7H18zM20,6H21V7H20zM22,6H23V7H22zM23,6H24V7H23zM24,6H25V7H24zM25,6H26V7H25zM26,6H27V7H26zM27,6H28V7H27zM28,6H29V7H28zM10,7H11V8H10zM11,7H12V8H11zM14,7H15V8H14zM16,7H17V8H16zM18,7H19V8H18zM20,7H21V8H20zM0,8H1V9H0zM2,8H3V9H2zM6,8H7V9H6zM7,8H8V9H7zM9,8H10V9H9zM10,8H11V9H10zM12,8H13V9H12zM16,8H17V9H16zM18,8H19V9H18zM20,8H21V9H20zM23,8H24V9H23zM26,8H27V9H26zM28,8H29V9H28zM0,9H1V10H0zM1,9H2V10H1zM2,9H3V10H2zM4,9H5V10H4zM5,9H6V10H5zM7,9H8V10H7zM10,9H11V10H10zM12,9H13V10H12zM13,9H14V10H13zM15,9H16V10H15zM17,9H18V10H17zM19,9H20V10H19zM20,9H21V10H20zM21,9H22V10H21zM22,9H23V10H22zM23,9H24V10H23zM27,9H28V10H27zM28,9H29V10H28zM1,10H2V11H1zM6,10H7V11H6zM9,10H10V11H9zM11,10H12V11H11zM12,10H13V11H12zM14,10H15V11H14zM15,10H16V11H15zM16,10H17V11H16zM17,10H18V11H17zM19,10H20V11H19zM22,10H23V11H22zM23,10H24V11H23zM24,10H25V11H24zM25,10H26V11H25zM26,10H27V11H26zM28,10H29V11H28zM0,11H1V12H0zM1,11H2V12H1zM3,11H4V12H3zM5,11H6V12H5zM7,11H8V12H7zM8,11H9V12H8zM9,11H10V12H9zM11,11H12V12H11zM12,11H13V12H12zM16,11H17V12H16zM18,11H19V12H18zM19,11H20V12H19zM21,11H22V12H21zM24,11H25V12H24zM25,11H26V12H25zM0,12H1V13H0zM1,12H2V13H1zM2,12H3V13H2zM3,12H4V13H3zM4,12H5V13H4zM6,12H7V13H6zM7,12H8V13H7zM9,12H10V13H9zM10,12H11V13H10zM12,12H13V13H12zM15,12H16V13H15zM16,12H17V13H16zM19,12H20V13H19zM20,12H21V13H20zM22,12H23V13H22zM23,12H24V13H23zM28,12H29V13H28zM0,13H1V14H0zM1,13H2V14H1zM5,13H6V14H5zM7,13H8V14H7zM10,13H11V14H10zM12,13H13V14H12zM15,13H16V14H15zM16,13H17V14H16zM18,13H19V14H18zM19,13H20V14H19zM20,13H21V14H20zM22,13H23V14H22zM23,13H24V14H23zM27,13H28V14H27zM28,13H29V14H28zM0,14H1V15H0zM3,14H4V15H3zM6,14H7V15H6zM11,14H12V15H11zM13,14H14V15H13zM15,14H16V15H15zM18,14H19V15H18zM19,14H20V15H19zM21,14H22V15H21zM22,14H23V15H22zM23,14H24V15H23zM24,14H25V15H24zM28,14H29V15H28zM1,15H2V16H1zM2,15H3V16H2zM3,15H4V16H3zM4,15H5V16H4zM8,15H9V16H8zM12,15H13V16H12zM14,15H15V16H14zM16,15H17V16H16zM18,15H19V16H18zM19,15H20V16H19zM20,15H21V16H20zM22,15H23V16H22zM23,15H24V16H23zM1,16H2V17H1zM2,16H3V17H2zM3,16H4V17H3zM4,16H5V17H4zM5,16H6V17H5zM6,16H7V17H6zM7,16H8V17H7zM8,16H9V17H8zM9,16H10V17H9zM10,16H11V17H10zM12,16H13V17H12zM15,16H16V17H15zM18,16H19V17H18zM20,16H21V17H20zM21,16H22V17H21zM22,16H23V17H22zM28,16H29V17H28zM1,17H2V18H1zM5,17H6V18H5zM15,17H16V18H15zM16,17H17V18H16zM17,17H18V18H17zM19,17H20V18H19zM22,17H23V18H22zM23,17H24V18H23zM26,17H27V18H26zM27,17H28V18H27zM28,17H29V18H28zM0,18H1V19H0zM1,18H2V19H1zM2,18H3V19H2zM3,18H4V19H3zM5,18H6V19H5zM6,18H7V19H6zM7,18H8V19H7zM11,18H12V19H11zM14,18H15V19H14zM15,18H16V19H15zM17,18H18V19H17zM19,18H20V19H19zM24,18H25V19H24zM25,18H26V19H25zM28,18H29V19H28zM2,19H3V20H2zM3,19H4V20H3zM4,19H5V20H4zM8,19H9V20H8zM9,19H10V20H9zM11,19H12V20H11zM14,19H15V20H14zM15,19H16V20H15zM16,19H17V20H16zM18,19H19V20H18zM20,19H21V20H20zM22,19H23V20H22zM24,19H25V20H24zM0,20H1V21H0zM1,20H2V21H1zM5,20H6V21H5zM6,20H7V21H6zM9,20H10V21H9zM16,20H17V21H16zM20,20H21V21H20zM21,20H22V21H21zM22,20H23V21H22zM23,20H24V21H23zM24,20H25V21H24zM25,20H26V21H25zM27,20H28V21H27zM8,21H9V22H8zM11,21H12V22H11zM12,21H13V22H12zM14,21H15V22H14zM15,21H16V22H15zM16,21H17V22H16zM17,21H18V22H17zM20,21H21V22H20zM24,21H25V22H24zM25,21H26V22H25zM26,21H27V22H26zM28,21H29V22H28zM0,22H1V23H0zM1,22H2V23H1zM2,22H3V23H2zM3,22H4V23H3zM4,22H5V23H4zM5,22H6V23H5zM6,22H7V23H6zM8,22H9V23H8zM12,22H13V23H12zM13,22H14V23H13zM15,22H16V23H15zM16,22H17V23H16zM20,22H21V23H20zM22,22H23V23H22zM24,22H25V23H24zM28,22H29V23H28zM0,23H1V24H0zM6,23H7V24H6zM11,23H12V24H11zM12,23H13V24H12zM16,23H17V24H16zM19,23H20V24H19zM20,23H21V24H20zM24,23H25V24H24zM28,23H29V24H28zM0,24H1V25H0zM2,24H3V25H2zM3,24H4V25H3zM4,24H5V25H4zM6,24H7V25H6zM9,24H10V25H9zM11,24H12V25H11zM12,24H13V25H12zM13,24H14V25H13zM14,24H15V25H14zM16,24H17V25H16zM18,24H19V25H18zM19,24H20V25H19zM20,24H21V25H20zM21,24H22V25H21zM22,24H23V25H22zM23,24H24V25H23zM24,24H25V25H24zM25,24H26V25H25zM27,24H28V25H27zM0,25H1V26H0zM2,25H3V26H2zM3,25H4V26H3zM4,25H5V26H4zM6,25H7V26H6zM10,25H11V26H10zM13,25H14V26H13zM15,25H16V26H15zM16,25H17V26H16zM17,25H18V26H17zM19,25H20V26H19zM20,25H21V26H20zM21,25H22V26H21zM24,25H25V26H24zM25,25H26V26H25zM26,25H27V26H26zM28,25H29V26H28zM0,26H1V27H0zM2,26H3V27H2zM3,26H4V27H3zM4,26H5V27H4zM6,26H7V27H6zM8,26H9V27H8zM9,26H10V27H9zM11,26H12V27H11zM12,26H13V27H12zM14,26H15V27H14zM15,26H16V27H15zM21,26H22V27H21zM24,26H25V27H24zM27,26H28V27H27zM28,26H29V27H28zM0,27H1V28H0zM6,27H7V28H6zM9,27H10V28H9zM10,27H11V28H10zM12,27H13V28H12zM13,27H14V28H13zM15,27H16V28H15zM18,27H19V28H18zM20,27H21V28H20zM23,27H24V28H23zM24,27H25V28H24zM25,27H26V28H25zM0,28H1V29H0zM1,28H2V29H1zM2,28H3V29H2zM3,28H4V29H3zM4,28H5V29H4zM5,28H6V29H5zM6,28H7V29H6zM8,28H9V29H8zM10,28H11V29H10zM13,28H14V29H13zM14,28H15V29H14zM15,28H16V29H15zM16,28H17V29H16zM20,28H21V29H20zM24,28H25V29H24zM25,28H26V29H25zM28,28H29V29H28z" id="qr-path" fill="#000000" fill-opacity="1" fill-rule="nonzero" stroke="none" /></svg></div>
+</footer>
+
+</div></body></html>
