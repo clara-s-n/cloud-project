@@ -141,6 +141,7 @@ docs/                Resumen ejecutivo, guion de la exposición y preguntas
 
 ## Documentación
 
+- **[Estado del proyecto y pendientes](docs/ESTADO-DEL-PROYECTO.md)** (empezar por acá)
 - [Resumen ejecutivo](docs/resumen-ejecutivo.md)
 - [Guion de la exposición y preguntas probables](docs/guion-presentacion.md)
 - [Cómo grabar el video de respaldo de la demo](docs/grabar-demo.md)
