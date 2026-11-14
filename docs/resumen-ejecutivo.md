@@ -1,7 +1,7 @@
 ---
 title: "Detección de degradaciones en una API mediante monitoreo con Prometheus y Grafana"
 subtitle: "Resumen ejecutivo. Proyecto final, Electiva Cloud Computing"
-author: "[Integrante 1] · [Integrante 2] · [Integrante 3]"
+author: "Ana Sena · Francisco Lima · Nicolás Márquez"
 date: "Noviembre de 2026"
 lang: es
 ---
