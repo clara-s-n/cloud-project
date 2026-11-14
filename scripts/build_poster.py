@@ -12,8 +12,7 @@ OUT = ROOT / "docs" / "poster" / "poster.html"
 QR = (ROOT / "docs" / "poster" / "qr.svg").read_text(encoding="utf-8")
 QR = QR[QR.index("<svg"):].replace('width="29mm" height="29mm"', 'width="100%" height="100%"')
 
-# Integrantes: completar antes de exportar.
-AUTORES = "[Nombre Apellido 1] · [Nombre Apellido 2] · [Nombre Apellido 3]"
+AUTORES = "Ana Sena · Francisco Lima · Nicolás Márquez"
 
 # Paleta de series validada (dataviz validate_palette.js: 3 slots, all-pairs, modo claro).
 BLUE, AQUA, ORANGE = "#2a78d6", "#1baf7a", "#eb6834"
