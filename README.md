@@ -145,7 +145,8 @@ docs/                Resumen ejecutivo, guion de la exposición y preguntas
 - [Resumen ejecutivo](docs/resumen-ejecutivo.md)
 - [Guion de la exposición y preguntas probables](docs/guion-presentacion.md)
 - [Cómo grabar el video de respaldo de la demo](docs/grabar-demo.md)
-- [Póster A3 (PDF vectorial)](docs/poster/Grupo-Apellido1-Apellido2.pdf). Para regenerarlo con los nombres reales, editar `AUTORES` en `scripts/build_poster.py` y ejecutar `./scripts/export_poster.sh Grupo-Apellido1-Apellido2`.
+- [Póster A3 (PDF vectorial)](docs/poster/Grupo-Sena-Lima-Marquez.pdf). Para regenerarlo, editar `scripts/build_poster.py` y ejecutar `./scripts/export_poster.sh Grupo-Sena-Lima-Marquez`.
+- [Estado del proyecto y pendientes](docs/ESTADO-DEL-PROYECTO.md)
 
 ## Fuera de alcance
 

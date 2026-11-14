@@ -24,11 +24,11 @@ cualquier integrante (o Claude en otro dispositivo) retome el trabajo sin haber 
 | PoC: API + Prometheus + Grafana + k6 | `api/`, `prometheus/`, `grafana/`, `k6/`, `docker-compose.yml` | Funciona y está probada de punta a punta |
 | Scripts de demo | `scripts/demo.sh`, `snapshot.sh`, `alert_timeline.py` | Listos |
 | Resultados de referencia | `docs/resultados/` | Corrida limpia del 12/11 (log y línea de tiempo de alertas) |
-| Resumen ejecutivo | `docs/resumen-ejecutivo.md` y `.docx` | Completo; faltan los nombres |
+| Resumen ejecutivo | `docs/resumen-ejecutivo.md` y `.docx` | Completo, con los nombres |
 | Guion de la exposición + 12 preguntas probables | `docs/guion-presentacion.md` | Completo; reparto genérico (Integrante 1/2/3) |
 | Guía para grabar el video de respaldo | `docs/grabar-demo.md` | Lista |
-| Presentación (15 diapositivas) | Artifact de claude.ai en esta cuenta: https://claude.ai/artifact/UMiuKZcVpJCGZEWnriCcWQ · fuente en `docs/presentacion/` | Completa; faltan los nombres en la portada. Se descarga como .pptx o PDF |
-| Póster A3 | `docs/poster/Grupo-Sena-Lima-Marquez.pdf` (generado por `scripts/build_poster.py`) | **Ver pendiente 1** |
+| Presentación (15 diapositivas) | Artifact de claude.ai en esta cuenta: https://claude.ai/artifact/UMiuKZcVpJCGZEWnriCcWQ · fuente en `docs/presentacion/` | Completa, con los nombres en la portada. Se descarga como .pptx o PDF |
+| Póster A3 | `docs/poster/Grupo-Sena-Lima-Marquez.pdf` (generado por `scripts/build_poster.py`) | Regenerado el 14/11 con los nombres reales |
 
 ## Cómo funciona la PoC (en 30 segundos)
 
@@ -66,14 +66,13 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
 
 ## Pendientes y preguntas abiertas
 
-1. **El póster PDF todavía muestra los nombres de ejemplo.** En el commit `ff74c75` se editó
-   `poster.html` con los nombres y se renombró el PDF, pero el PDF no se regeneró: es idéntico byte a byte al
-   anterior. Además, `scripts/build_poster.py` sigue teniendo `AUTORES = "[Nombre Apellido 1] · …"`, así que
-   regenerar el póster pisaría `poster.html`. Solución: poner los nombres en `AUTORES` y ejecutar
-   `./scripts/export_poster.sh Grupo-Sena-Lima-Marquez`. Para eso hace falta Docker; el script usa
-   Chrome headless dentro de un contenedor.
-2. **Faltan los nombres en el resto de los documentos:** la portada de la presentación, el campo `author`
-   del resumen ejecutivo (después hay que regenerar el `.docx` con pandoc) y el reparto del guion.
+1. ~~El póster PDF todavía muestra los nombres de ejemplo.~~ **Resuelto el 14/11:** los nombres están en
+   `AUTORES` (`scripts/build_poster.py`) y el PDF y la vista previa se regeneraron con
+   `./scripts/export_poster.sh Grupo-Sena-Lima-Marquez` (1 página A3, vectorial).
+2. **Falta definir el reparto de la exposición.** Los nombres ya están en la portada de la presentación
+   (repo y artifact) y en el resumen ejecutivo (`.md` y `.docx`; en el `.docx` se reemplazó solo el campo de
+   autor para no alterar el formato). Queda decidir quién es Integrante 1, 2 y 3 y reemplazarlo en
+   `docs/guion-presentacion.md` y en las notas de orador de las diapositivas.
 3. **El video de respaldo no está grabado.** Se va a grabar en este dispositivo; seguir
    `docs/grabar-demo.md`. Antes de grabar, generar datos con `DURATION=3m ./scripts/demo.sh` y no usar el
    equipo para nada pesado mientras corre, porque eso altera las latencias.
