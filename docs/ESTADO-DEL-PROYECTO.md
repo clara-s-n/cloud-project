@@ -72,7 +72,12 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
 2. ~~Falta definir el reparto de la exposición.~~ **Resuelto el 14/11:** Nicolás (diapositivas 1–4),
    Ana Clara (5–8) y Francisco (9–14, incluida la demo). Está en `docs/guion-presentacion.md` y en las notas
    de orador del repo y del artifact.
-3. **El video de respaldo no está grabado.** Se va a grabar en este dispositivo; seguir
+3. **Video de respaldo grabado el 15/11** (2 min 15 s, 1920×1080, sin audio, con subtítulos de la
+   narración). Lo grabó Claude Code con Playwright sobre los datos del 14/11, siguiendo el guion de
+   `docs/grabar-demo.md`; el cierre muestra el historial PENDING/FIRING de `ALERTS` en Prometheus. Quedó en
+   `C:\Users\franc\Downloads\demo-respaldo.mp4` (H.264, 7 MB; también está el `.webm` original). Falta
+   subirlo a la carpeta compartida; no va al repositorio. Notas originales:
+   El video se iba a grabar en este dispositivo; seguir
    `docs/grabar-demo.md`. Antes de grabar, generar datos con `DURATION=3m ./scripts/demo.sh` y no usar el
    equipo para nada pesado mientras corre, porque eso altera las latencias.
    El 14/11 ya se generaron datos en el equipo de Francisco: corrida limpia de 3 min por escenario, de
