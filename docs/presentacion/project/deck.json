@@ -11,7 +11,7 @@
     "s3": { "description": "La PoC: arquitectura, instrumentación y escenarios.", "start": "arquitectura" },
     "s4": { "description": "Resultados medidos y hallazgos.", "start": "resultados" },
     "s5": { "description": "Análisis crítico y conclusiones.", "start": "tradeoffs" },
-    "s6": { "description": "Demostración en vivo, referencias y preguntas.", "start": "demo" }
+    "s6": { "description": "Demostración en video, referencias y preguntas.", "start": "demo" }
   },
   "cover": "cover",
   "faces": {

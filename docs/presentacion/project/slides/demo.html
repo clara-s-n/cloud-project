@@ -1,11 +1,11 @@
 <section id="demo" class="dark" style="justify-content:center; gap:48px;">
-<p class="eyebrow">Demostración en vivo</p>
+<p class="eyebrow">Demostración (video)</p>
 <h1>Veámoslo en Grafana</h1>
 <div class="row" style="gap:24px;">
-<div class="card"><p class="tag">1 · Línea base</p><p class="body">Panel de resumen: up, health, tráfico, errores y p95 en verde.</p></div>
+<div class="card"><p class="tag">1 · Línea base</p><p class="body">Panel de resumen: la API arriba y el health check en 200 durante toda la prueba.</p></div>
 <div class="card"><p class="tag">2 · Latencia</p><p class="body">Media contra percentiles y heatmap bimodal. Alerta p95.</p></div>
-<div class="card"><p class="tag">3 · Errores</p><p class="body">Barras rojas, desglose por ruta. Alerta de errores.</p></div>
+<div class="card"><p class="tag">3 · Errores</p><p class="body">Barras rojas, desglose por ruta y alertas en Prometheus.</p></div>
 </div>
-<p class="small mono">localhost:3001 · localhost:9090/alerts · ./scripts/demo.sh · respaldo: video de 2 min</p>
-<aside>[Francisco] — 10:40 a 13:40. 3 minutos, al final de la exposición. Ver docs/guion-presentacion.md para los pasos exactos. Tener la pestaña de Grafana ya abierta en el dashboard, con rango “Last 15 minutes”. Cerrar volviendo a la pregunta inicial: “En ningún momento la API dejó de estar disponible, y aun así RED detectó las dos degradaciones”. Si algo falla, pasar al video de respaldo (demo-respaldo.mp4) sin dar explicaciones largas.</aside>
+<p class="small mono">Video de 2 min 15 s · datos reales de la PoC · Grafana + Prometheus · misma carga, tres escenarios</p>
+<aside>[Francisco] — 10:40 a 13:40. Pasar demo-respaldo.mp4 (la versión sin música) a pantalla completa y narrarlo en vivo; los subtítulos ya guían cada tramo. Dura 2:15, así que hay unos 45 segundos para pausar donde haga falta: conviene detenerse en el panel de latencia (media contra p95) y en las alertas del final. Tener el video abierto y en pausa en el primer cuadro antes de empezar la exposición. Ver docs/guion-presentacion.md para la narración por tramos. Cerrar volviendo a la pregunta inicial: “En ningún momento la API dejó de estar disponible, y aun así RED detectó las dos degradaciones”.</aside>
 </section>

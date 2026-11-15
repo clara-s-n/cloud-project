@@ -7,11 +7,11 @@ La exposición se divide en tres bloques parejos, uno por integrante, y termina 
 | Introducción y marco teórico | Nicolás | 1–4 | 3:30 |
 | La PoC | Ana Clara | 5–8 | 3:30 |
 | Resultados y análisis | Francisco | 9–13 | 3:40 |
-| **Demo** | Francisco al teclado | 14 | 3:00 |
+| **Demo** (video narrado) | Francisco | 14 | 3:00 |
 | Preguntas | Todos | 15 | 0:20 |
 
 Total: 14:00, con **1 minuto de margen** sobre los 15. Si falta alguien y quedan dos, Ana Clara toma también
-el bloque de Francisco salvo la demo, que conviene que haga quien maneja el teclado.
+el bloque de Francisco y también narra el video de la demo.
 
 | Tiempo | Diapositiva | Quién | Idea clave |
 |---|---|---|---|
@@ -28,69 +28,47 @@ el bloque de Francisco salvo la demo, que conviene que haga quien maneja el tecl
 | 8:20–8:50 | 11. Errores | Francisco | Los errores rápidos bajan la latencia |
 | 8:50–9:50 | 12. Ventajas/limitaciones | Francisco | Trade-offs |
 | 9:50–10:40 | 13. Conclusiones | Francisco | Respuesta a la pregunta; transición: "ahora lo vemos funcionando" |
-| 10:40–13:40 | 14. **Demo en vivo** | Francisco | Grafana + alertas en Prometheus |
+| 10:40–13:40 | 14. **Demo (video)** | Francisco | Video narrado: Grafana + alertas en Prometheus |
 | 13:40–14:00 | 15. Referencias / preguntas | Todos | |
 
 > El tiempo de la rúbrica para la exposición dice "10 min" en un sitio y 15 en otro. Si el docente exige 10,
 > recortar así: quitar las diapositivas 8 y 11 (contarlas de palabra), acortar cada bloque a unos 2:30 y
-> dejar la demo en 2 minutos al final, con la opción B (solo latencia y errores sobre datos ya generados).
+> dejar la demo en 2 minutos al final: pasar el video desde 0:28 y cortarlo en 1:50 (latencia, heatmap y
+> errores), contando las alertas de palabra.
 
-## Preparación (30 min antes)
+## Preparación (antes de empezar)
 
-1. Levantar el laboratorio y **pre-generar datos** con el equipo libre (si la máquina está cargada, las
-   latencias salen falsas):
+1. Copiar `demo-respaldo.mp4` (la versión **sin música**) al equipo que se conecta al proyector y abrirlo en
+   el reproductor, en pausa en el primer cuadro. Tener una copia en un pendrive o en la carpeta compartida.
+2. Probar que se ve a pantalla completa y que los subtítulos se leen desde el fondo del aula.
+3. Opcional: tener el laboratorio levantado por si en las preguntas piden ver algo en vivo. Si se hace,
+   generar antes los datos con el equipo libre:
    ```bash
    docker compose up -d --build
    DURATION=3m ./scripts/demo.sh        # ~10 min: deja los tres escenarios en el historial
    ```
-2. Abrir en pestañas:
-   - Grafana: <http://localhost:3001/d/api-red> (rango *Last 15 minutes*).
-   - Prometheus: <http://localhost:9090/alerts>.
-   - Una terminal con letra grande en la carpeta del proyecto.
-3. Tener el **video de respaldo** (`demo-respaldo.mp4`, 2 min 15 s, sin audio y con subtítulos) abierto en
-   otra ventana. Si hay que usarlo, narrarlo en vivo.
-4. Comprobar que la API está en modo normal:
-   ```bash
-   curl localhost:3000/admin/chaos
-   ```
 
-## Demo en vivo (3 min), paso a paso
+## Demo (3 min): video narrado
 
-La demo va al final, después de Conclusiones: sirve para mostrar funcionando lo que se acaba de contar.
+La demo va al final, después de Conclusiones, y se hace con el video `demo-respaldo.mp4` (2 min 15 s, datos
+reales de la PoC, sin audio y con subtítulos). Francisco lo narra en vivo; los subtítulos dicen lo
+esencial, así que la narración agrega contexto en vez de leerlos. Sobran unos 45 s para pausar: usarlos en
+el panel de latencia y en las alertas.
 
-**Opción A, en vivo (recomendada si la red y el equipo son fiables).** Lanzar el escenario de latencia
-*al empezar la diapositiva 11* (~8:20), para que al llegar a la demo ya lleve más de 2 min y la alerta esté
-disparada:
+| Video (aprox.) | Qué se ve | Qué decir |
+|---|---|---|
+| 0:00–0:04 | Portada "Disponible no significa sano" | "Esto es lo que midió la PoC, con la misma carga en los tres escenarios." |
+| 0:04–0:16 | Fila de arriba: **Target ARRIBA**, **Health check OK** | "Si solo miráramos esto, todo está bien: la API nunca dejó de estar disponible." |
+| 0:16–0:28 | Panel **Escenario inyectado** | "Corrimos normal, latencia y errores, uno detrás del otro." |
+| 0:28–0:58 | **Latencia: media vs percentiles**, con el tooltip | **Pausar.** "La mediana casi no se mueve; p95 y p99 pasan del segundo. La media queda por debajo de 500 ms: una alerta por promedio no habría sonado." |
+| 0:58–1:12 | **Heatmap** | "Dos franjas: las peticiones normales y las lentas. Ningún número solo lo resume." |
+| 1:12–1:38 | **Tráfico por código** y **Tasa de errores (%)** | "El volumen es el mismo, pero aparecen 500 y la tasa supera el 5 %. La latencia sigue normal: fallar rápido parece ir rápido." |
+| 1:38–1:50 | **Tasa de errores 5xx por ruta** | "Sabemos *dónde*: todas las rutas por igual, lo que apunta a una causa común." |
+| 1:50–2:10 | Historial de alertas en Prometheus (PENDING = 1, FIRING = 2) | **Pausar.** "Cada alerta pasa primero a PENDING y, si la condición dura un minuto (`for: 1m`), a FIRING. La de caída nunca se disparó." |
+| 2:10–2:15 | Cierre | "En ningún momento la API dejó de estar disponible, y aun así RED detectó las dos degradaciones." Pasar a la diapositiva de preguntas. |
 
-```bash
-docker compose run --rm -e DURATION=4m k6 run /scripts/latencia.js
-```
-
-1. **Fila "Resumen"** (0:00–0:20): "Target: ARRIBA, health check: OK. Si solo miráramos esto, todo está
-   bien." Señalar **Latencia p95** en rojo.
-2. **Panel "Latencia: media vs percentiles"** (0:20–0:50): "La mediana (verde) sigue en ~20 ms. La media sube
-   algo. p95 y p99 superan el segundo. Si alertáramos por la media no veríamos el problema."
-3. **Heatmap** (0:50–1:05): "Se ven dos franjas: las peticiones rápidas y las que tardan ~1,2 s. Es una
-   distribución bimodal que ningún número resume bien."
-4. **Prometheus → Alerts** (1:05–1:20): `ApiLatenciaP95Alta` en *FIRING*.
-5. Cortar k6 (Ctrl+C) y lanzar errores (1:20):
-   ```bash
-   docker compose run --rm -e DURATION=3m k6 run /scripts/errores.js
-   ```
-6. **Panel "Tráfico por código de estado"** (1:30–1:50): aparecen barras rojas (500) con el mismo volumen
-   total.
-7. **Panel "Tasa de errores (%)"** (1:50–2:10): cruza la línea del 5 %. Los 4xx (amarillo) están aparte.
-8. **Panel "Tasa de errores 5xx por ruta"** (2:10–2:30): "Sabemos *dónde*: todas las rutas por igual. Eso
-   apunta a una causa común, por ejemplo una dependencia compartida."
-9. **Prometheus → Alerts** (2:30–2:50): `ApiTasaErroresAlta` estará en *PENDING* (pasa a *FIRING* ~85 s
-   después de lanzar el escenario). Aprovechar para explicar el `for: 1m`.
-10. Cerrar (2:50–3:00): "En ningún momento la API dejó de estar disponible, y aun así RED detectó las dos
-    degradaciones." Pasar a la diapositiva de preguntas.
-
-**Opción B, sobre historial.** Si no hay tiempo de esperar o algo falla, poner el rango en *Last 15
-minutes* sobre los datos de la preparación y recorrer los mismos paneles señalando cada tramo (el panel
-"Escenario inyectado" y el de alertas muestran qué pasó en cada momento). Si tampoco funciona Grafana,
-pasar al video de respaldo.
+Si el reproductor falla, volver a las diapositivas 9 a 11 (resultados) y contar los mismos puntos de
+palabra; no improvisar una demo en vivo.
 
 ## Preguntas probables y respuestas
 
