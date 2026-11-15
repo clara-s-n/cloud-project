@@ -77,7 +77,10 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
 3. **Video de respaldo grabado el 15/11** (2 min 15 s, 1920×1080, sin audio, con subtítulos de la
    narración). Lo grabó Claude Code con Playwright sobre los datos del 14/11, siguiendo el guion de
    `docs/grabar-demo.md`; el cierre muestra el historial PENDING/FIRING de `ALERTS` en Prometheus. Quedó en
-   `C:\Users\franc\Downloads\demo-respaldo.mp4` (H.264, 7 MB; también está el `.webm` original). Falta
+   `C:\Users\franc\Downloads\demo-respaldo.mp4` (H.264, 7 MB; también está el `.webm` original). Hay dos variantes
+   con una pista de fondo original (generada por código, sin derechos de terceros, −20 LUFS) para verlo
+   solo: `demo-respaldo-musica.mp4` (tranquila, La menor, 90 bpm) y `demo-respaldo-musica-feliz.mp4`
+   (alegre, Do mayor, 112 bpm, con percusión suave); en la exposición se usa la versión sin música porque se narra en vivo. Falta
    subirlo a la carpeta compartida; no va al repositorio. Notas originales:
    El video se iba a grabar en este dispositivo; seguir
    `docs/grabar-demo.md`. Antes de grabar, generar datos con `DURATION=3m ./scripts/demo.sh` y no usar el
