@@ -4,13 +4,14 @@
   "lists": "css",
   "format": { "v": 1, "shared": ["project/deck.css"] },
   "title": "Detección de degradaciones en una API con Prometheus y Grafana",
-  "order": ["cover", "problema", "pregunta", "senales", "prometheus", "arquitectura", "instrumentacion", "escenarios", "resultados", "media", "errores", "demo", "tradeoffs", "conclusiones", "referencias"],
+  "order": ["cover", "problema", "pregunta", "senales", "prometheus", "arquitectura", "instrumentacion", "escenarios", "resultados", "media", "errores", "tradeoffs", "conclusiones", "demo", "referencias"],
   "sections": {
     "s1": { "description": "El problema: una API disponible no es una API sana.", "start": "cover" },
     "s2": { "description": "Marco teórico: señales RED y el modelo de Prometheus.", "start": "senales" },
     "s3": { "description": "La PoC: arquitectura, instrumentación y escenarios.", "start": "arquitectura" },
-    "s4": { "description": "Resultados medidos y demostración en vivo.", "start": "resultados" },
-    "s5": { "description": "Análisis crítico, conclusiones y referencias.", "start": "tradeoffs" }
+    "s4": { "description": "Resultados medidos y hallazgos.", "start": "resultados" },
+    "s5": { "description": "Análisis crítico y conclusiones.", "start": "tradeoffs" },
+    "s6": { "description": "Demostración en vivo, referencias y preguntas.", "start": "demo" }
   },
   "cover": "cover",
   "faces": {

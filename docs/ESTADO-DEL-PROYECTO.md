@@ -25,9 +25,9 @@ cualquier integrante (o Claude en otro dispositivo) retome el trabajo sin haber 
 | Scripts de demo | `scripts/demo.sh`, `snapshot.sh`, `alert_timeline.py` | Listos |
 | Resultados de referencia | `docs/resultados/` | Corrida limpia del 12/11 (log y línea de tiempo de alertas) |
 | Resumen ejecutivo | `docs/resumen-ejecutivo.md` y `.docx` | Completo, con los nombres |
-| Guion de la exposición + 12 preguntas probables | `docs/guion-presentacion.md` | Completo, con reparto: Nicolás (1–4), Ana Clara (5–8), Francisco (9–14 y demo) |
+| Guion de la exposición + 12 preguntas probables | `docs/guion-presentacion.md` | Completo: tres bloques (Nicolás 1–4, Ana Clara 5–8, Francisco 9–13) y la demo al final (14); 14 min con 1 de margen |
 | Guía para grabar el video de respaldo | `docs/grabar-demo.md` | Lista |
-| Presentación (15 diapositivas) | Artifact de claude.ai en esta cuenta: https://claude.ai/artifact/UMiuKZcVpJCGZEWnriCcWQ · fuente en `docs/presentacion/` | Completa, con los nombres en la portada y en las notas de orador (versión 11 del artifact, 14/11). Se descarga como .pptx o PDF |
+| Presentación (15 diapositivas) | Artifact de claude.ai en esta cuenta: https://claude.ai/artifact/UMiuKZcVpJCGZEWnriCcWQ · fuente en `docs/presentacion/` | Completa, con los nombres en la portada y en las notas de orador (versión 12 del artifact, 15/11: demo movida al final). Se descarga como .pptx o PDF |
 | Póster A3 | `docs/poster/Grupo-Sena-Lima-Marquez.pdf` (generado por `scripts/build_poster.py`) | Regenerado el 14/11 con los nombres reales |
 
 ## Cómo funciona la PoC (en 30 segundos)
@@ -70,8 +70,10 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
    `AUTORES` (`scripts/build_poster.py`) y el PDF y la vista previa se regeneraron con
    `./scripts/export_poster.sh Grupo-Sena-Lima-Marquez` (1 página A3, vectorial).
 2. ~~Falta definir el reparto de la exposición.~~ **Resuelto el 14/11:** Nicolás (diapositivas 1–4),
-   Ana Clara (5–8) y Francisco (9–14, incluida la demo). Está en `docs/guion-presentacion.md` y en las notas
-   de orador del repo y del artifact.
+   Ana Clara (5–8) y Francisco (9–13). **Cambiado el 15/11** a pedido del equipo: la demo pasó al final
+   (diapositiva 14, 10:40–13:40, Francisco al teclado), después de Conclusiones. Cada bloque dura ~3:30, la
+   exposición termina a los 14:00 y queda 1 minuto de margen. Está en `docs/guion-presentacion.md` y en las
+   notas de orador del repo y del artifact.
 3. **Video de respaldo grabado el 15/11** (2 min 15 s, 1920×1080, sin audio, con subtítulos de la
    narración). Lo grabó Claude Code con Playwright sobre los datos del 14/11, siguiendo el guion de
    `docs/grabar-demo.md`; el cierre muestra el historial PENDING/FIRING de `ALERTS` en Prometheus. Quedó en
@@ -88,7 +90,7 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
    El 14/11 (después del reinicio) se comprobó que los datos siguen en el volumen: tráfico de 20:33 a 20:41
    y las alertas `ApiLatenciaP95Alta` y `ApiTasaErroresAlta` en *FIRING*.
 4. **Duración de la exposición:** la rúbrica dice "10 min" en un lugar y 15 en otro. El guion está armado
-   para 15 e indica qué recortar si son 10. Conviene confirmarlo con el docente.
+   para un máximo de 15 (dura 14 con la demo) e indica qué recortar si son 10. Conviene confirmarlo con el docente.
 5. **Largo del resumen ejecutivo:** son unas 1 600 palabras con 3 tablas; se estimó en ~3 páginas, pero
    no se verificó en Word. Si pasa de 3, bajar la letra a 11 pt o los márgenes a 2 cm.
 6. **Presentación privada:** el artifact solo lo ve el dueño de la cuenta; para que lo vean los demás hay

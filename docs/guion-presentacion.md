@@ -1,8 +1,17 @@
 # Guion de la exposición (15 min + 5 min de preguntas)
 
-Reparto: Nicolás (diapositivas 1–4), Ana Clara (5–8) y Francisco (9–14, incluida la demo). Si falta alguien
-y quedan dos, Ana Clara toma también el bloque de Francisco salvo la demo, que conviene que haga quien maneja
-el teclado.
+La exposición se divide en tres bloques parejos, uno por integrante, y termina con la demo:
+
+| Bloque | Quién | Diapositivas | Duración |
+|---|---|---|---|
+| Introducción y marco teórico | Nicolás | 1–4 | 3:30 |
+| La PoC | Ana Clara | 5–8 | 3:30 |
+| Resultados y análisis | Francisco | 9–13 | 3:40 |
+| **Demo** | Francisco al teclado | 14 | 3:00 |
+| Preguntas | Todos | 15 | 0:20 |
+
+Total: 14:00, con **1 minuto de margen** sobre los 15. Si falta alguien y quedan dos, Ana Clara toma también
+el bloque de Francisco salvo la demo, que conviene que haga quien maneja el teclado.
 
 | Tiempo | Diapositiva | Quién | Idea clave |
 |---|---|---|---|
@@ -10,69 +19,78 @@ el teclado.
 | 0:30–1:30 | 2. El problema | Nicolás | `/health` en verde ≠ servicio sano |
 | 1:30–2:15 | 3. Pregunta | Nicolás | Hipótesis, método y alcance |
 | 2:15–3:30 | 4. Señales RED | Nicolás | Rate, Errors, Duration (+ Golden Signals / USE) |
-| 3:30–4:45 | 5. Prometheus | Ana Clara | Pull, etiquetas, PromQL, tipos de métrica |
-| 4:45–5:45 | 6. Arquitectura | Ana Clara | Misma carga, solo cambia el fallo |
-| 5:45–7:00 | 7. Instrumentación | Ana Clara | Cardinalidad + el bug de `route="unmatched"` |
-| 7:00–7:45 | 8. Escenarios | Ana Clara | 25 % lentas / 12 % con error |
-| 7:45–8:30 | 9. Resultados | Francisco | Tabla con los números medidos |
-| 8:30–9:00 | 10. La media engaña | Francisco | Mediana ≈ igual, p95 ×27; la media no cruza el umbral |
-| 9:00–9:30 | 11. Errores | Francisco | Los errores rápidos bajan la latencia |
-| 9:30–13:00 | 12. **Demo en vivo** | Francisco | Grafana + alertas en Prometheus |
-| 13:00–14:00 | 13. Ventajas/limitaciones | Francisco | Trade-offs |
-| 14:00–15:00 | 14. Conclusiones | Francisco | Respuesta a la pregunta |
-| 15:00 | 15. Referencias / preguntas | Todos | |
+| 3:30–4:30 | 5. Prometheus | Ana Clara | Pull, etiquetas, PromQL, tipos de métrica |
+| 4:30–5:20 | 6. Arquitectura | Ana Clara | Misma carga, solo cambia el fallo |
+| 5:20–6:20 | 7. Instrumentación | Ana Clara | Cardinalidad + el bug de `route="unmatched"` |
+| 6:20–7:00 | 8. Escenarios | Ana Clara | 25 % lentas / 12 % con error |
+| 7:00–7:45 | 9. Resultados | Francisco | Tabla con los números medidos |
+| 7:45–8:20 | 10. La media engaña | Francisco | Mediana ≈ igual, p95 ×27; la media no cruza el umbral |
+| 8:20–8:50 | 11. Errores | Francisco | Los errores rápidos bajan la latencia |
+| 8:50–9:50 | 12. Ventajas/limitaciones | Francisco | Trade-offs |
+| 9:50–10:40 | 13. Conclusiones | Francisco | Respuesta a la pregunta; transición: "ahora lo vemos funcionando" |
+| 10:40–13:40 | 14. **Demo en vivo** | Francisco | Grafana + alertas en Prometheus |
+| 13:40–14:00 | 15. Referencias / preguntas | Todos | |
 
 > El tiempo de la rúbrica para la exposición dice "10 min" en un sitio y 15 en otro. Si el docente exige 10,
-> recortar así: quitar las diapositivas 8 y 11 (contarlas de palabra) y dejar la demo en 2 minutos, mostrando
-> solo latencia y errores sobre datos ya generados.
+> recortar así: quitar las diapositivas 8 y 11 (contarlas de palabra), acortar cada bloque a unos 2:30 y
+> dejar la demo en 2 minutos al final, con la opción B (solo latencia y errores sobre datos ya generados).
 
 ## Preparación (30 min antes)
 
-1. Levantar el laboratorio y **pre-generar datos** para no depender del tiempo real:
+1. Levantar el laboratorio y **pre-generar datos** con el equipo libre (si la máquina está cargada, las
+   latencias salen falsas):
    ```bash
    docker compose up -d --build
-   DURATION=2m ./scripts/demo.sh        # ~7 min: deja los tres escenarios en el historial
+   DURATION=3m ./scripts/demo.sh        # ~10 min: deja los tres escenarios en el historial
    ```
 2. Abrir en pestañas:
-   - Grafana: <http://localhost:3001/d/api-red> (rango *Last 15 minutes*, refresco 5 s).
+   - Grafana: <http://localhost:3001/d/api-red> (rango *Last 15 minutes*).
    - Prometheus: <http://localhost:9090/alerts>.
    - Una terminal con letra grande en la carpeta del proyecto.
-3. Tener el **video de respaldo** (2 min) abierto en otra ventana. Grabarlo antes con OBS durante una
-   corrida de `demo.sh`.
+3. Tener el **video de respaldo** (`demo-respaldo.mp4`, 2 min 15 s, sin audio y con subtítulos) abierto en
+   otra ventana. Si hay que usarlo, narrarlo en vivo.
 4. Comprobar que la API está en modo normal:
    ```bash
    curl localhost:3000/admin/chaos
    ```
 
-## Demo en vivo (3,5 min), paso a paso
+## Demo en vivo (3 min), paso a paso
+
+La demo va al final, después de Conclusiones: sirve para mostrar funcionando lo que se acaba de contar.
 
 **Opción A, en vivo (recomendada si la red y el equipo son fiables).** Lanzar el escenario de latencia
-*al empezar la diapositiva 9*, para que al llegar a la demo ya lleve ~1,5 min y la alerta esté disparada:
+*al empezar la diapositiva 11* (~8:20), para que al llegar a la demo ya lleve más de 2 min y la alerta esté
+disparada:
 
 ```bash
 docker compose run --rm -e DURATION=4m k6 run /scripts/latencia.js
 ```
 
-1. **Fila "Resumen"**: "Target: ARRIBA, health check: OK. Si solo miráramos esto, todo está bien."
-   Señalar **Latencia p95** en rojo.
-2. **Panel "Latencia: media vs percentiles"**: "La mediana (verde) sigue en ~20 ms. La media sube algo.
-   p95 y p99 superan el segundo. Si alertáramos por la media no veríamos el problema."
-3. **Heatmap**: "Se ven dos franjas: las peticiones rápidas y las que tardan ~1,2 s. Es una distribución
-   bimodal que ningún número resume bien."
-4. **Prometheus → Alerts**: `ApiLatenciaP95Alta` en *FIRING* (o *PENDING*: explicar el `for: 1m`).
-5. Cortar k6 (Ctrl+C) y lanzar errores:
+1. **Fila "Resumen"** (0:00–0:20): "Target: ARRIBA, health check: OK. Si solo miráramos esto, todo está
+   bien." Señalar **Latencia p95** en rojo.
+2. **Panel "Latencia: media vs percentiles"** (0:20–0:50): "La mediana (verde) sigue en ~20 ms. La media sube
+   algo. p95 y p99 superan el segundo. Si alertáramos por la media no veríamos el problema."
+3. **Heatmap** (0:50–1:05): "Se ven dos franjas: las peticiones rápidas y las que tardan ~1,2 s. Es una
+   distribución bimodal que ningún número resume bien."
+4. **Prometheus → Alerts** (1:05–1:20): `ApiLatenciaP95Alta` en *FIRING*.
+5. Cortar k6 (Ctrl+C) y lanzar errores (1:20):
    ```bash
    docker compose run --rm -e DURATION=3m k6 run /scripts/errores.js
    ```
-6. **Panel "Tráfico por código de estado"**: aparecen barras rojas (500) con el mismo volumen total.
-7. **Panel "Tasa de errores (%)"**: cruza la línea del 5 %. Los 4xx (amarillo) están aparte.
-8. **Panel "Tasa de errores 5xx por ruta"**: "Sabemos *dónde*: todas las rutas por igual. Eso apunta a
-   una causa común, por ejemplo una dependencia compartida."
-9. Cerrar: "En ningún momento la API dejó de estar disponible."
+6. **Panel "Tráfico por código de estado"** (1:30–1:50): aparecen barras rojas (500) con el mismo volumen
+   total.
+7. **Panel "Tasa de errores (%)"** (1:50–2:10): cruza la línea del 5 %. Los 4xx (amarillo) están aparte.
+8. **Panel "Tasa de errores 5xx por ruta"** (2:10–2:30): "Sabemos *dónde*: todas las rutas por igual. Eso
+   apunta a una causa común, por ejemplo una dependencia compartida."
+9. **Prometheus → Alerts** (2:30–2:50): `ApiTasaErroresAlta` estará en *PENDING* (pasa a *FIRING* ~85 s
+   después de lanzar el escenario). Aprovechar para explicar el `for: 1m`.
+10. Cerrar (2:50–3:00): "En ningún momento la API dejó de estar disponible, y aun así RED detectó las dos
+    degradaciones." Pasar a la diapositiva de preguntas.
 
-**Opción B, sobre historial.** Si no hay tiempo de esperar, poner el rango en *Last 15 minutes* sobre
-los datos de la preparación y recorrer los mismos paneles señalando cada tramo (el panel
-"Escenario inyectado" y el de alertas muestran qué pasó en cada momento).
+**Opción B, sobre historial.** Si no hay tiempo de esperar o algo falla, poner el rango en *Last 15
+minutes* sobre los datos de la preparación y recorrer los mismos paneles señalando cada tramo (el panel
+"Escenario inyectado" y el de alertas muestran qué pasó en cada momento). Si tampoco funciona Grafana,
+pasar al video de respaldo.
 
 ## Preguntas probables y respuestas
 
