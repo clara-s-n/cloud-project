@@ -1,24 +1,25 @@
 # Guion de la exposición (15 min + 5 min de preguntas)
 
-Reparto pensado para tres integrantes. Con dos, el Integrante 2 toma también el bloque del Integrante 3
-salvo la demo, que conviene que haga quien maneja el teclado.
+Reparto: Nicolás (diapositivas 1–4), Ana Clara (5–8) y Francisco (9–14, incluida la demo). Si falta alguien
+y quedan dos, Ana Clara toma también el bloque de Francisco salvo la demo, que conviene que haga quien maneja
+el teclado.
 
 | Tiempo | Diapositiva | Quién | Idea clave |
 |---|---|---|---|
-| 0:00–0:30 | 1. Portada | Integrante 1 | Presentación y gancho |
-| 0:30–1:30 | 2. El problema | Integrante 1 | `/health` en verde ≠ servicio sano |
-| 1:30–2:15 | 3. Pregunta | Integrante 1 | Hipótesis, método y alcance |
-| 2:15–3:30 | 4. Señales RED | Integrante 1 | Rate, Errors, Duration (+ Golden Signals / USE) |
-| 3:30–4:45 | 5. Prometheus | Integrante 2 | Pull, etiquetas, PromQL, tipos de métrica |
-| 4:45–5:45 | 6. Arquitectura | Integrante 2 | Misma carga, solo cambia el fallo |
-| 5:45–7:00 | 7. Instrumentación | Integrante 2 | Cardinalidad + el bug de `route="unmatched"` |
-| 7:00–7:45 | 8. Escenarios | Integrante 2 | 25 % lentas / 12 % con error |
-| 7:45–8:30 | 9. Resultados | Integrante 3 | Tabla con los números medidos |
-| 8:30–9:00 | 10. La media engaña | Integrante 3 | Mediana ≈ igual, p95 ×27; la media no cruza el umbral |
-| 9:00–9:30 | 11. Errores | Integrante 3 | Los errores rápidos bajan la latencia |
-| 9:30–13:00 | 12. **Demo en vivo** | Integrante 3 | Grafana + alertas en Prometheus |
-| 13:00–14:00 | 13. Ventajas/limitaciones | Integrante 3 | Trade-offs |
-| 14:00–15:00 | 14. Conclusiones | Integrante 3 | Respuesta a la pregunta |
+| 0:00–0:30 | 1. Portada | Nicolás | Presentación y gancho |
+| 0:30–1:30 | 2. El problema | Nicolás | `/health` en verde ≠ servicio sano |
+| 1:30–2:15 | 3. Pregunta | Nicolás | Hipótesis, método y alcance |
+| 2:15–3:30 | 4. Señales RED | Nicolás | Rate, Errors, Duration (+ Golden Signals / USE) |
+| 3:30–4:45 | 5. Prometheus | Ana Clara | Pull, etiquetas, PromQL, tipos de métrica |
+| 4:45–5:45 | 6. Arquitectura | Ana Clara | Misma carga, solo cambia el fallo |
+| 5:45–7:00 | 7. Instrumentación | Ana Clara | Cardinalidad + el bug de `route="unmatched"` |
+| 7:00–7:45 | 8. Escenarios | Ana Clara | 25 % lentas / 12 % con error |
+| 7:45–8:30 | 9. Resultados | Francisco | Tabla con los números medidos |
+| 8:30–9:00 | 10. La media engaña | Francisco | Mediana ≈ igual, p95 ×27; la media no cruza el umbral |
+| 9:00–9:30 | 11. Errores | Francisco | Los errores rápidos bajan la latencia |
+| 9:30–13:00 | 12. **Demo en vivo** | Francisco | Grafana + alertas en Prometheus |
+| 13:00–14:00 | 13. Ventajas/limitaciones | Francisco | Trade-offs |
+| 14:00–15:00 | 14. Conclusiones | Francisco | Respuesta a la pregunta |
 | 15:00 | 15. Referencias / preguntas | Todos | |
 
 > El tiempo de la rúbrica para la exposición dice "10 min" en un sitio y 15 en otro. Si el docente exige 10,

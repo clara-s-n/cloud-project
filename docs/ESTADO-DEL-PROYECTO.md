@@ -25,9 +25,9 @@ cualquier integrante (o Claude en otro dispositivo) retome el trabajo sin haber 
 | Scripts de demo | `scripts/demo.sh`, `snapshot.sh`, `alert_timeline.py` | Listos |
 | Resultados de referencia | `docs/resultados/` | Corrida limpia del 12/11 (log y línea de tiempo de alertas) |
 | Resumen ejecutivo | `docs/resumen-ejecutivo.md` y `.docx` | Completo, con los nombres |
-| Guion de la exposición + 12 preguntas probables | `docs/guion-presentacion.md` | Completo; reparto genérico (Integrante 1/2/3) |
+| Guion de la exposición + 12 preguntas probables | `docs/guion-presentacion.md` | Completo, con reparto: Nicolás (1–4), Ana Clara (5–8), Francisco (9–14 y demo) |
 | Guía para grabar el video de respaldo | `docs/grabar-demo.md` | Lista |
-| Presentación (15 diapositivas) | Artifact de claude.ai en esta cuenta: https://claude.ai/artifact/UMiuKZcVpJCGZEWnriCcWQ · fuente en `docs/presentacion/` | Completa, con los nombres en la portada. Se descarga como .pptx o PDF |
+| Presentación (15 diapositivas) | Artifact de claude.ai en esta cuenta: https://claude.ai/artifact/UMiuKZcVpJCGZEWnriCcWQ · fuente en `docs/presentacion/` | Completa, con los nombres en la portada y en las notas de orador (versión 11 del artifact, 14/11). Se descarga como .pptx o PDF |
 | Póster A3 | `docs/poster/Grupo-Sena-Lima-Marquez.pdf` (generado por `scripts/build_poster.py`) | Regenerado el 14/11 con los nombres reales |
 
 ## Cómo funciona la PoC (en 30 segundos)
@@ -69,10 +69,9 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
 1. ~~El póster PDF todavía muestra los nombres de ejemplo.~~ **Resuelto el 14/11:** los nombres están en
    `AUTORES` (`scripts/build_poster.py`) y el PDF y la vista previa se regeneraron con
    `./scripts/export_poster.sh Grupo-Sena-Lima-Marquez` (1 página A3, vectorial).
-2. **Falta definir el reparto de la exposición.** Los nombres ya están en la portada de la presentación
-   (repo y artifact) y en el resumen ejecutivo (`.md` y `.docx`; en el `.docx` se reemplazó solo el campo de
-   autor para no alterar el formato). Queda decidir quién es Integrante 1, 2 y 3 y reemplazarlo en
-   `docs/guion-presentacion.md` y en las notas de orador de las diapositivas.
+2. ~~Falta definir el reparto de la exposición.~~ **Resuelto el 14/11:** Nicolás (diapositivas 1–4),
+   Ana Clara (5–8) y Francisco (9–14, incluida la demo). Está en `docs/guion-presentacion.md` y en las notas
+   de orador del repo y del artifact.
 3. **El video de respaldo no está grabado.** Se va a grabar en este dispositivo; seguir
    `docs/grabar-demo.md`. Antes de grabar, generar datos con `DURATION=3m ./scripts/demo.sh` y no usar el
    equipo para nada pesado mientras corre, porque eso altera las latencias.
@@ -81,6 +80,8 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
    `poc-observabilidad_prometheus-data` y sirven hasta el 16/11 (retención de 2 días). Para usarlos:
    `docker compose up -d` y abrir el dashboard con `/?orgId=1&from=1794699060000&to=1794699840000`. Pasado
    ese plazo hay que volver a correr la demo. Ver también la nota sobre WSL y Chrome más abajo.
+   El 14/11 (después del reinicio) se comprobó que los datos siguen en el volumen: tráfico de 20:33 a 20:41
+   y las alertas `ApiLatenciaP95Alta` y `ApiTasaErroresAlta` en *FIRING*.
 4. **Duración de la exposición:** la rúbrica dice "10 min" en un lugar y 15 en otro. El guion está armado
    para 15 e indica qué recortar si son 10. Conviene confirmarlo con el docente.
 5. **Largo del resumen ejecutivo:** son unas 1 600 palabras con 3 tablas; se estimó en ~3 páginas, pero
@@ -89,9 +90,9 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
    que compartirlo desde su menú *Share*.
 7. **Impresión:** A3 vertical a color. Antes de mandarlo a la imprenta, imprimir una prueba en A4: el
    texto más chico (referencias, ejes de los gráficos) mide unos 9–10 pt.
-8. **Rama `docs/team-names` sin fusionar.** Los cambios del 14/11 (póster, nombres, README y este
-   documento) están en esa rama del clon de Francisco (`~/cloud-project` en WSL). Falta subirla y
-   fusionarla en `main`.
+8. **Rama `docs/team-names` sin fusionar.** Los cambios del 14/11 (póster, nombres, reparto, README y
+   este documento) están en esa rama, que ya está en GitHub. Falta fusionarla en `main`; no hay pull
+   request abierto.
 
 ## Notas para retomar el trabajo
 
@@ -102,6 +103,9 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
   (PowerShell, escuchando solo en `127.0.0.1`) de 13001→3001 y 19090→9090, y abrir
   `http://127.0.0.1:13001` y `http://127.0.0.1:19090/alerts`. La opción (b) se verificó el 14/11 cargando
   el dashboard en Chrome.
+  **Actualización 14/11:** en `.wslconfig` la línea `networkingMode=mirrored` está comentada y WSL corre en
+  modo `nat` (`wslinfo --networking-mode`). Así no hace falta el puente: desde Windows, `curl.exe` llega a
+  `localhost:3001` y `localhost:9090`, y Chrome abre el dashboard directamente (confirmado por Francisco).
 
 - En Windows, usar WSL (o clonar con `core.autocrlf input`): los scripts son bash.
 - Todo corre en contenedores; no hace falta instalar Node ni k6.
