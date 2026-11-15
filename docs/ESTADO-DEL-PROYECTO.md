@@ -76,6 +76,11 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
 3. **El video de respaldo no está grabado.** Se va a grabar en este dispositivo; seguir
    `docs/grabar-demo.md`. Antes de grabar, generar datos con `DURATION=3m ./scripts/demo.sh` y no usar el
    equipo para nada pesado mientras corre, porque eso altera las latencias.
+   El 14/11 ya se generaron datos en el equipo de Francisco: corrida limpia de 3 min por escenario, de
+   20:33 a 20:41 (UTC−3), sin `dropped_iterations` y con las dos alertas en *FIRING*. Quedaron en el volumen
+   `poc-observabilidad_prometheus-data` y sirven hasta el 16/11 (retención de 2 días). Para usarlos:
+   `docker compose up -d` y abrir el dashboard con `/?orgId=1&from=1794699060000&to=1794699840000`. Pasado
+   ese plazo hay que volver a correr la demo. Ver también la nota sobre WSL y Chrome más abajo.
 4. **Duración de la exposición:** la rúbrica dice "10 min" en un lugar y 15 en otro. El guion está armado
    para 15 e indica qué recortar si son 10. Conviene confirmarlo con el docente.
 5. **Largo del resumen ejecutivo:** son unas 1 600 palabras con 3 tablas; se estimó en ~3 páginas, pero
@@ -84,8 +89,19 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
    que compartirlo desde su menú *Share*.
 7. **Impresión:** A3 vertical a color. Antes de mandarlo a la imprenta, imprimir una prueba en A4: el
    texto más chico (referencias, ejes de los gráficos) mide unos 9–10 pt.
+8. **Rama `docs/team-names` sin fusionar.** Los cambios del 14/11 (póster, nombres, README y este
+   documento) están en esa rama del clon de Francisco (`~/cloud-project` en WSL). Falta subirla y
+   fusionarla en `main`.
 
 ## Notas para retomar el trabajo
+
+- **WSL con `networkingMode=mirrored` (equipo de Francisco):** Chrome en Windows no abre
+  `localhost:3001` ni `127.0.0.1:3001`, aunque `curl.exe` y PowerShell de Windows sí llegan. No es un
+  problema del laboratorio. Hay dos salidas: (a) volver a la red NAT quitando esa línea de
+  `C:\Users\<usuario>\.wslconfig` y ejecutando `wsl --shutdown`; (b) un puente TCP temporal en Windows
+  (PowerShell, escuchando solo en `127.0.0.1`) de 13001→3001 y 19090→9090, y abrir
+  `http://127.0.0.1:13001` y `http://127.0.0.1:19090/alerts`. La opción (b) se verificó el 14/11 cargando
+  el dashboard en Chrome.
 
 - En Windows, usar WSL (o clonar con `core.autocrlf input`): los scripts son bash.
 - Todo corre en contenedores; no hace falta instalar Node ni k6.
