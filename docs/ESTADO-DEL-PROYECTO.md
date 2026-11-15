@@ -90,9 +90,8 @@ k6 (30 req/s) → API Node.js/Express + prom-client → Prometheus (scrape 5 s, 
    que compartirlo desde su menú *Share*.
 7. **Impresión:** A3 vertical a color. Antes de mandarlo a la imprenta, imprimir una prueba en A4: el
    texto más chico (referencias, ejes de los gráficos) mide unos 9–10 pt.
-8. **Rama `docs/team-names` sin fusionar.** Los cambios del 14/11 (póster, nombres, reparto, README y
-   este documento) están en esa rama, que ya está en GitHub. Falta fusionarla en `main`; no hay pull
-   request abierto.
+8. ~~Rama `docs/team-names` sin fusionar.~~ **Resuelto el 14/11:** se fusionó en `main` por
+   fast-forward (commit `8f3a815`), con el póster, los nombres, el reparto, el README y este documento.
 
 ## Notas para retomar el trabajo
 
