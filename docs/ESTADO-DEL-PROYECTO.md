@@ -28,7 +28,7 @@ cualquier integrante (o Claude en otro dispositivo) retome el trabajo sin haber 
 | Guion de la exposición + 12 preguntas probables | `docs/guion-presentacion.md` | Completo: tres bloques (Nicolás 1–4, Ana Clara 5–8, Francisco 9–13) y la demo al final (14); 14 min con 1 de margen |
 | Guía para grabar el video de respaldo | `docs/grabar-demo.md` | Lista |
 | Presentación (15 diapositivas) | Artifact de claude.ai en esta cuenta: https://claude.ai/artifact/UMiuKZcVpJCGZEWnriCcWQ · fuente en `docs/presentacion/` | Completa, con los nombres en la portada y en las notas de orador (versión 13 del artifact, 15/11: demo al final, con el video narrado). Se descarga como .pptx o PDF |
-| Póster A3 | `docs/poster/Grupo-Sena-Lima-Marquez.pdf` (generado por `scripts/build_poster.py`) | Regenerado el 14/11 con los nombres reales |
+| Póster A3 | `docs/poster/Grupo-Sena-Lima-Marquez.pdf` (generado por `scripts/build_poster.py`) | Rediseñado el 19/11 al estilo infografía (tarjetas pastel, poco texto): problema → cómo lo probamos → qué encontramos → lo que aprendimos. Las fuentes (Inter y Nunito) se descargan de Google Fonts al exportar, así que hace falta conexión |
 
 ## Cómo funciona la PoC (en 30 segundos)
 

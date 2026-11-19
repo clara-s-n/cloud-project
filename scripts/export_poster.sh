@@ -11,13 +11,13 @@ python3 scripts/build_poster.py
 
 docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD/docs/poster":/work \
   --entrypoint chromium-browser zenika/alpine-chrome:124 \
-  --headless --no-sandbox --disable-gpu --no-pdf-header-footer \
+  --headless --no-sandbox --disable-gpu --no-pdf-header-footer --virtual-time-budget=10000 \
   --print-to-pdf="/work/${NAME}.pdf" file:///work/poster.html 2>/dev/null
 
 docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD/docs/poster":/work \
   --entrypoint chromium-browser zenika/alpine-chrome:124 \
   --headless --no-sandbox --disable-gpu --hide-scrollbars --window-size=1123,1587 \
-  --force-device-scale-factor=1 --screenshot=/work/preview.png file:///work/poster.html 2>/dev/null
+  --force-device-scale-factor=1 --virtual-time-budget=10000 --screenshot=/work/preview.png file:///work/poster.html 2>/dev/null
 
 echo "PDF:      docs/poster/${NAME}.pdf"
 echo "Preview:  docs/poster/preview.png"

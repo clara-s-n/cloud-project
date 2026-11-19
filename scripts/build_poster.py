@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Genera docs/poster/poster.html (póster A3 vertical, 297 × 420 mm) con gráficos SVG vectoriales.
+"""Genera docs/poster/poster.html: póster A3 vertical (297 × 420 mm), estilo infografía.
+
+Diseño sencillo: título grande, objetivo en una línea, tres filas de tres tarjetas
+(¿Cuál es el problema? · ¿Cómo lo probamos? · ¿Qué encontramos?) con ilustraciones
+SVG vectoriales y poco texto, y una banda final con las conclusiones.
 
 Los datos vienen de la corrida de referencia (docs/resultados/demo-run.log y
 docs/resultados/linea-de-tiempo-alertas.txt).
-Exportar a PDF vectorial:  ./scripts/export_poster.sh Grupo-Apellido1-Apellido2
+Exportar a PDF vectorial:  ./scripts/export_poster.sh Grupo-Sena-Lima-Marquez
 """
 from pathlib import Path
 
@@ -14,422 +18,275 @@ QR = QR[QR.index("<svg"):].replace('width="29mm" height="29mm"', 'width="100%" h
 
 AUTORES = "Ana Clara Sena · Francisco Lima · Nicolás Márquez"
 
-# Paleta de series validada (dataviz validate_palette.js: 3 slots, all-pairs, modo claro).
-BLUE, AQUA, ORANGE = "#2a78d6", "#1baf7a", "#eb6834"
-INK, INK2, MUTED, GRID = "#141A26", "#3A4354", "#5B6475", "#D9D5CC"
-WARN, CRIT, OK = "#C98500", "#D63A39", "#1E7F4F"
+# Paleta
+INK = "#17192B"          # trazos y títulos
+LAV, LAV_SH, LAV_TX = "#D6D4F0", "#C4C1EA", "#3B3E7A"      # tarjeta lavanda
+CRM, CRM_SH, CRM_TX = "#FDF8E2", "#F3EAC2", "#3A3F5C"      # tarjeta crema
+PCH, PCH_SH, PCH_TX = "#FDDDA0", "#F7CC7E", "#A8380F"      # tarjeta durazno
+BAND = "#5F63D2"         # banda de conclusiones
+ACC = "#F28C28"          # acento naranja (íconos de la banda)
+GREEN, RED, BLUE = "#2E9A5E", "#D9443F", "#5F63D2"
 
-SCEN = ["Normal", "Latencia", "Errores"]
-LAT = {  # ms, medidos por k6 (cliente)
-    "p50": [19, 23, 17],
-    "media": [22, 312, 18.5],
-    "p95": [52, 1400, 47],
-}
-ERR = [0, 0, 11.95]  # % de respuestas 5xx, k6
+S = f'stroke="{INK}" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"'
 
 
-def bar(x, y0, w, h, color):
-    """Barra anclada a la base con extremo de datos redondeado (4 px)."""
-    if h < 5:
-        return f'<rect x="{x:.1f}" y="{y0 - max(h, 1.5):.1f}" width="{w}" height="{max(h, 1.5):.1f}" fill="{color}"/>'
-    y, r = y0 - h, 4
-    return (f'<path d="M{x:.1f},{y0} V{y + r:.1f} Q{x:.1f},{y:.1f} {x + r:.1f},{y:.1f} '
-            f'H{x + w - r:.1f} Q{x + w:.1f},{y:.1f} {x + w:.1f},{y + r:.1f} V{y0} Z" fill="{color}"/>')
+def svg(body, label, vb="0 0 200 140", w=180):
+    return f'<svg viewBox="{vb}" width="{w}" role="img" aria-label="{label}">{body}</svg>'
 
 
-def latency_chart():
-    W, H = 470, 330
-    x0, x1, y0, y1 = 52, 462, 290, 30
-    vmax = 1600
-    sy = lambda v: y0 - v / vmax * (y0 - y1)
-    out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" '
-           f'aria-label="Latencia p50, media y p95 por escenario frente al umbral de 500 ms">']
-    for v in (0, 500, 1000, 1500):
-        y = sy(v)
-        out.append(f'<line x1="{x0}" x2="{x1}" y1="{y:.1f}" y2="{y:.1f}" stroke="{GRID}"/>')
-        out.append(f'<text x="{x0 - 8}" y="{y + 5:.1f}" text-anchor="end" class="ax">'
-                   f'{"0" if v == 0 else f"{v:,}".replace(",", ".")}</text>')
-    out.append(f'<text x="{x0 - 8}" y="16" text-anchor="end" class="ax">ms</text>')
-    ty = sy(500)
-    out.append(f'<line x1="{x0}" x2="{x1}" y1="{ty:.1f}" y2="{ty:.1f}" stroke="{INK}" stroke-width="2" stroke-dasharray="7 5"/>')
-    out.append(f'<text x="{x0 + 4}" y="{ty - 8:.1f}" class="lbl b">umbral de alerta 500 ms</text>')
-    gw = (x1 - x0) / 3
-    series = [("p50", BLUE), ("media", AQUA), ("p95", ORANGE)]
-    bw, gap = 34, 2
-    for i, name in enumerate(SCEN):
-        c = x0 + gw * (i + 0.5)
-        for j, (s, col) in enumerate(series):
-            v = LAT[s][i]
-            x = c - (3 * bw + 2 * gap) / 2 + j * (bw + gap)
-            h = v / vmax * (y0 - y1)
-            out.append(bar(x, y0, bw, h, col))
-            label = f"{v:g}".replace(".", ",") if v < 1000 else f"{v / 1000:g} s".replace(".", ",")
-            weight = " b" if (i == 1 and s != "p50") else ""
-            out.append(f'<text x="{x + bw / 2:.1f}" y="{y0 - h - 7:.1f}" text-anchor="middle" class="val{weight}">{label}</text>')
-        out.append(f'<text x="{c:.1f}" y="{y0 + 26}" text-anchor="middle" class="cat">{name}</text>')
-    out.append(f'<line x1="{x0}" x2="{x1}" y1="{y0}" y2="{y0}" stroke="{INK2}" stroke-width="1.5"/>')
-    out.append("</svg>")
-    return "".join(out)
+def person(x, y, fill, scale=1.0):
+    """Persona simple: cabeza y torso, con contorno."""
+    r = 13 * scale
+    return (f'<circle cx="{x}" cy="{y}" r="{r}" fill="{fill}" {S.replace("fill=\"none\" ", "")}/>'
+            f'<path d="M{x - 22 * scale},{y + 58 * scale} Q{x - 22 * scale},{y + 20 * scale} {x},{y + 20 * scale} '
+            f'Q{x + 22 * scale},{y + 20 * scale} {x + 22 * scale},{y + 58 * scale} Z" fill="{fill}" '
+            f'{S.replace("fill=\"none\" ", "")}/>')
 
 
-def error_chart():
-    W, H = 250, 398
-    x0, x1, y0, y1 = 40, 244, 356, 34
-    vmax = 15
-    sy = lambda v: y0 - v / vmax * (y0 - y1)
-    out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Tasa de errores 5xx por escenario frente al umbral del 5 %">']
-    for v in (0, 5, 10, 15):
-        y = sy(v)
-        out.append(f'<line x1="{x0}" x2="{x1}" y1="{y:.1f}" y2="{y:.1f}" stroke="{GRID}"/>')
-        out.append(f'<text x="{x0 - 7}" y="{y + 5:.1f}" text-anchor="end" class="ax">{v}%</text>')
-    out.append(f'<text x="{x0 - 7}" y="16" text-anchor="end" class="ax">5xx</text>')
-    ty = sy(5)
-    out.append(f'<line x1="{x0}" x2="{x1}" y1="{ty:.1f}" y2="{ty:.1f}" stroke="{INK}" stroke-width="2" stroke-dasharray="7 5"/>')
-    out.append(f'<text x="{x0 + 4}" y="{ty - 8:.1f}" class="lbl b">umbral 5 %</text>')
-    gw = (x1 - x0) / 3
-    for i, name in enumerate(SCEN):
-        c = x0 + gw * (i + 0.5)
-        v = ERR[i]
-        h = v / vmax * (y0 - y1)
-        if v > 0:
-            out.append(bar(c - 22, y0, 44, h, ORANGE))
-        out.append(f'<text x="{c:.1f}" y="{y0 - h - 7:.1f}" text-anchor="middle" class="val{" b" if v else ""}">{v:.0f} %</text>')
-        out.append(f'<text x="{c:.1f}" y="{y0 + 26}" text-anchor="middle" class="cat sm">{name}</text>')
-    out.append(f'<line x1="{x0}" x2="{x1}" y1="{y0}" y2="{y0}" stroke="{INK2}" stroke-width="1.5"/>')
-    out.append("</svg>")
-    return "".join(out)
+# --- Ilustraciones -----------------------------------------------------------
+
+def ill_health_ok():
+    """Monitor con tilde verde: el health check dice que todo está bien."""
+    return svg(
+        f'<rect x="30" y="34" width="140" height="86" rx="8" fill="#B9B6E8" opacity=".55"/>'
+        f'<rect x="38" y="18" width="124" height="84" rx="8" fill="#FFFFFF" {S.replace("fill=\"none\" ", "")}/>'
+        f'<path d="M86,102 L80,122 H120 L114,102" {S}/><path d="M72,122 H128" {S}/>'
+        f'<circle cx="100" cy="52" r="20" fill="{GREEN}"/>'
+        f'<path d="M90,52 L97,59 L111,45" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<text x="100" y="92" text-anchor="middle" class="svgt" fill="{INK}">200 OK</text>',
+        "Monitor con un health check en verde: 200 OK")
 
 
-def pipeline():
-    """Flujo de la PoC: cuatro pasos con el mismo estilo (ícono en círculo, nombre y función)."""
-    W, H = 1043, 146
-    steps = [
-        ("load", "k6", "genera 30 req/s"),
-        ("cube", "API Node.js", "expone métricas RED"),
-        ("radar", "Prometheus", "recolecta y alerta"),
-        ("dashboard", "Grafana", "dashboard RED"),
-    ]
-    cw, r, cy = W / 4, 38, 44
-    out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Flujo de la prueba de concepto: k6, API, Prometheus, Grafana">',
-           f'<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">'
-           f'<path d="M0,0 L10,5 L0,10 z" fill="{ORANGE}"/></marker></defs>']
-    for i, (ic, title, desc) in enumerate(steps):
-        cx = cw * (i + 0.5)
-        out.append(f'<circle cx="{cx:.1f}" cy="{cy}" r="{r}" fill="#FBFAF7" stroke="#CFC8BA" stroke-width="2"/>')
-        out.append(icon_at(ic, INK2, f"{cx - 23:.1f}", cy - 23, 46))
-        out.append(f'<circle cx="{cx - r + 4:.1f}" cy="{cy - r + 6}" r="13" fill="{ORANGE}"/>')
-        out.append(f'<text x="{cx - r + 4:.1f}" y="{cy - r + 11.5}" text-anchor="middle" class="num">{i + 1}</text>')
-        out.append(f'<text x="{cx:.1f}" y="{cy + r + 32}" text-anchor="middle" class="box" fill="{INK}">{title}</text>')
-        out.append(f'<text x="{cx:.1f}" y="{cy + r + 56}" text-anchor="middle" class="desc" fill="{MUTED}">{desc}</text>')
-        if i < 3:
-            out.append(f'<line x1="{cx + r + 18:.1f}" x2="{cx + cw - r - 18:.1f}" y1="{cy}" y2="{cy}" '
-                       f'stroke="{ORANGE}" stroke-width="3" marker-end="url(#ah)"/>')
-    out.append("</svg>")
-    return "".join(out)
-
-
-def people():
-    """Cuatro usuarios, uno resaltado: 1 de cada 4 espera más de 1 s."""
-    out = ['<svg viewBox="0 0 250 92" width="150" role="img" aria-label="Uno de cada cuatro usuarios afectado">']
+def ill_waiting():
+    """Cuatro usuarios; uno, resaltado, espera con un reloj encima."""
+    body = ""
     for i in range(4):
-        x = 32 + i * 62
-        col = ORANGE if i == 3 else "#9AA3B2"
-        out.append(f'<circle cx="{x}" cy="22" r="15" fill="{col}"/>')
-        out.append(f'<path d="M{x - 25},90 Q{x - 25},44 {x},44 Q{x + 25},44 {x + 25},90 Z" fill="{col}"/>')
-    out.append("</svg>")
-    return "".join(out)
+        x = 34 + i * 44
+        col = "#F4F0DA" if i < 3 else ACC
+        body += person(x, 62, col, 0.85)
+    # reloj sobre el usuario que espera
+    body += (f'<circle cx="166" cy="22" r="16" fill="#FFFFFF" {S.replace("fill=\"none\" ", "")}/>'
+             f'<path d="M166,22 V13 M166,22 L172,26" {S}/>'
+             f'<path d="M150,4 Q140,0 132,8" {S}/><path d="M124,16 Q120,26 126,34" {S}/>')
+    return svg(body, "Cuatro usuarios, uno de ellos esperando")
 
 
-def shield():
-    """Escudo verde con tilde: el health check dice que todo está bien."""
-    return (f'<svg viewBox="0 0 120 150" width="70" role="img" aria-label="Health check: 200 OK">'
-            f'<path d="M60,6 L110,24 V68 C110,104 88,128 60,144 C32,128 10,104 10,68 V24 Z" fill="{OK}" stroke="#7FD3A6" stroke-width="3"/>'
-            f'<path d="M36,74 L54,92 L86,56" stroke="#fff" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
-            f'</svg>')
+def ill_error():
+    """Ventana de navegador con error 500."""
+    return svg(
+        f'<rect x="28" y="30" width="150" height="96" rx="10" fill="{PCH_SH}"/>'
+        f'<rect x="22" y="20" width="150" height="96" rx="10" fill="#FFF7E6" {S.replace("fill=\"none\" ", "")}/>'
+        f'<path d="M22,40 H172" {S}/><circle cx="36" cy="30" r="3.5" fill="{INK}"/><circle cx="48" cy="30" r="3.5" fill="{INK}"/>'
+        f'<path d="M97,52 L120,92 H74 Z" fill="{RED}" stroke="{INK}" stroke-width="3" stroke-linejoin="round"/>'
+        f'<path d="M97,64 V78" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="97" cy="85" r="3" fill="#fff"/>'
+        f'<text x="140" y="80" text-anchor="middle" class="svgt" fill="{PCH_TX}">500</text>',
+        "Ventana con un error 500")
 
 
-def icon(kind, color, size=40):
-    """Íconos de línea simples (viewBox 48 × 48)."""
-    s = f'stroke="{color}" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"'
+def ill_traffic():
+    """k6: flechas de peticiones hacia la API."""
+    body = (f'<rect x="120" y="34" width="62" height="74" rx="10" fill="#B9B6E8" opacity=".55"/>'
+            f'<rect x="114" y="26" width="62" height="74" rx="10" fill="#FFFFFF" {S.replace("fill=\"none\" ", "")}/>'
+            f'<text x="145" y="70" text-anchor="middle" class="svgt" fill="{INK}">API</text>')
+    for k, y in enumerate((36, 63, 90)):
+        body += f'<path d="M{18 + k * 6},{y} H96" {S}/><path d="M86,{y - 8} L97,{y} L86,{y + 8}" {S}/>'
+    body += f'<text x="58" y="124" text-anchor="middle" class="svgs" fill="{LAV_TX}">30 peticiones/s</text>'
+    return svg(body, "Tráfico constante de 30 peticiones por segundo hacia la API")
+
+
+def ill_chaos():
+    """La API con un rayo (errores) y un reloj de arena (lentitud)."""
+    return svg(
+        f'<rect x="58" y="30" width="88" height="88" rx="12" fill="{CRM_SH}"/>'
+        f'<rect x="52" y="22" width="88" height="88" rx="12" fill="#FFFFFF" {S.replace("fill=\"none\" ", "")}/>'
+        f'<text x="96" y="74" text-anchor="middle" class="svgt" fill="{INK}">API</text>'
+        # rayo
+        f'<path d="M168,8 L150,44 H166 L148,82" stroke="{RED}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+        # reloj de arena
+        f'<path d="M18,34 H44 M18,94 H44 M22,34 Q22,56 31,64 Q22,72 22,94 M40,34 Q40,56 31,64 Q40,72 40,94" {S}/>'
+        f'<path d="M25,88 Q31,76 37,88 Z" fill="{ACC}"/>',
+        "La API con fallos inyectados: lentitud y errores")
+
+
+def ill_dashboard():
+    """Dashboard con tres señales: Rate, Errors, Duration."""
+    return svg(
+        f'<rect x="26" y="26" width="160" height="100" rx="10" fill="{PCH_SH}"/>'
+        f'<rect x="18" y="16" width="160" height="100" rx="10" fill="#FFF7E6" {S.replace("fill=\"none\" ", "")}/>'
+        f'<path d="M34,96 L58,74 L78,84 L104,50 L124,62 L160,30" stroke="{ACC}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<path d="M150,28 L161,29 L160,40" {S}/>'
+        f'<path d="M34,104 H162" {S}/>'
+        f'<text x="98" y="136" text-anchor="middle" class="svgs" fill="{PCH_TX}">Rate · Errors · Duration</text>',
+        "Dashboard con las señales RED", vb="0 0 200 142")
+
+
+def ill_shield():
+    """Escudo verde: /health respondió 200 OK siempre."""
+    return svg(
+        f'<path d="M106,14 L150,30 V66 C150,98 130,118 106,130 C82,118 62,98 62,66 V30 Z" fill="#B9B6E8" opacity=".55"/>'
+        f'<path d="M100,8 L144,24 V60 C144,92 124,112 100,124 C76,112 56,92 56,60 V24 Z" fill="{GREEN}" stroke="{INK}" stroke-width="3.2" stroke-linejoin="round"/>'
+        f'<path d="M80,64 L95,79 L121,51" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+        "Escudo verde: el health check siempre respondió 200 OK")
+
+
+def ill_latency():
+    """Mini gráfico del escenario de latencia: la media no cruza el umbral de 500 ms; el p95, sí."""
+    base, top, vmax = 84, 6, 1450
+    h = lambda v: (base - top) * v / vmax
+    bars = [("media", 312, "#9C98DE", "312 ms"), ("p95", 1400, ACC, "1,4 s")]
+    body = ""
+    for i, (name, v, col, lab) in enumerate(bars):
+        x = 80 + i * 74
+        hh = h(v)
+        body += f'<rect x="{x}" y="{base - hh:.1f}" width="44" height="{hh:.1f}" rx="4" fill="{col}" stroke="{INK}" stroke-width="2.4"/>'
+        body += f'<text x="{x + 22}" y="{base + 17}" text-anchor="middle" class="svgs" fill="{CRM_TX}">{name}</text>'
+        body += f'<text x="{x + 22}" y="{base + 34}" text-anchor="middle" class="svgv" fill="{INK}">{lab}</text>'
+    ty = base - h(500)
+    body += f'<path d="M6,{ty:.1f} H196" stroke="{RED}" stroke-width="2.6" stroke-dasharray="7 5"/>'
+    body += f'<text x="6" y="{ty - 7:.1f}" class="svgs" fill="{RED}">umbral</text>'
+    body += f'<text x="6" y="{ty + 17:.1f}" class="svgs" fill="{RED}">500 ms</text>'
+    body += f'<path d="M66,{base} H196" {S}/>'
+    return svg(body, "Escenario de latencia: media 312 ms, por debajo del umbral de 500 ms; p95 1,4 s, por encima", vb="0 0 202 122", w=230)
+
+
+def ill_errors():
+    """12 de cada 100: cuadrícula de 10 × 10 con 12 celdas rojas y una campana."""
+    body = ""
+    red = {3, 17, 25, 38, 41, 56, 62, 70, 77, 84, 93, 99}
+    for k in range(100):
+        r, c = divmod(k, 10)
+        col = RED if k in red else "#FFF7E6"
+        body += f'<rect x="{4 + c * 10}" y="{4 + r * 10}" width="8.4" height="8.4" rx="1.6" fill="{col}" stroke="{INK}" stroke-width="1.1"/>'
+    body += (f'<path d="M122,64 V46 A16,16 0 0 1 154,46 V64 L160,70 H116 Z" fill="{ACC}" stroke="{INK}" stroke-width="3" stroke-linejoin="round"/>'
+             f'<path d="M132,76 A6,6 0 0 0 144,76" {S}/>'
+             f'<path d="M116,32 L110,26 M160,32 L166,26" {S}/>')
+    return svg(body, "12 de cada 100 respuestas fueron errores; la alerta sonó", vb="0 0 172 106")
+
+
+# --- Íconos de la banda (blancos) ----------------------------------------------
+
+def band_icon(kind):
+    s = 'stroke="#FFFFFF" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"'
     body = {
-        # Rate: velocímetro
-        "rate": f'<path d="M8,34 A16,16 0 1 1 40,34" {s}/><path d="M24,34 L33,20" {s}/>'
-                f'<circle cx="24" cy="34" r="3" fill="{color}"/>',
-        # Errors: triángulo de alerta
-        "errors": f'<path d="M24,7 L43,40 H5 Z" {s}/><path d="M24,19 V29" {s}/>'
-                  f'<circle cx="24" cy="34.5" r="2.2" fill="{color}"/>',
-        # Duration: cronómetro
-        "duration": f'<circle cx="24" cy="27" r="16" {s}/><path d="M24,27 V18" {s}/><path d="M24,27 L30,31" {s}/>'
-                    f'<path d="M19,5 H29 M24,5 V11" {s}/>',
-        # Escudo con tilde
-        "shield": f'<path d="M24,5 L40,11 V24 C40,34 33,41 24,44 C15,41 8,34 8,24 V11 Z" {s}/>'
-                  f'<path d="M17,24 L22,29 L31,19" {s}/>',
-        # Campana de alerta
-        "bell": f'<path d="M12,34 V22 A12,12 0 0 1 36,22 V34 L40,38 H8 Z" {s}/><path d="M20,42 A4,4 0 0 0 28,42" {s}/>',
-        # Lupa
-        "search": f'<circle cx="21" cy="21" r="12" {s}/><path d="M30,30 L41,41" {s}/>',
-        # Carga: pulso de actividad (k6)
-        "load": f'<path d="M3,26 H13 L18,10 L27,40 L32,24 H45" {s}/>',
-        # API: cubo
-        "cube": f'<path d="M24,5 L42,15 V34 L24,44 L6,34 V15 Z" {s}/><path d="M6,15 L24,25 L42,15 M24,25 V44" {s}/>',
-        # Recolectar: radar
-        "radar": f'<circle cx="24" cy="24" r="18" {s}/><circle cx="24" cy="24" r="9" {s}/>'
-                 f'<path d="M24,24 L37,11" {s}/><circle cx="24" cy="24" r="3" fill="{color}"/>',
-        # Visualizar: dashboard
-        "dashboard": f'<rect x="5" y="8" width="38" height="32" rx="4" {s}/><path d="M5,16 H43" {s}/>'
-                     f'<path d="M14,33 V27 M22,33 V22 M30,33 V25 M38,33 V20" {s}/>',
-        # Servidor (API)
-        "server": f'<rect x="6" y="6" width="36" height="15" rx="3" {s}/><rect x="6" y="27" width="36" height="15" rx="3" {s}/>'
-                  f'<circle cx="14" cy="13.5" r="2" fill="{color}"/><circle cx="14" cy="34.5" r="2" fill="{color}"/>',
+        "neq": f'<rect x="4" y="4" width="40" height="40" rx="8" fill="{ACC}"/>'
+               f'<path d="M13,19 H35 M13,29 H35 M30,11 L18,37" {s}/>',
+        "pct": f'<rect x="4" y="4" width="40" height="40" rx="8" fill="{ACC}"/>'
+               f'<path d="M14,35 L34,13" {s}/><circle cx="16" cy="16" r="4" {s}/><circle cx="32" cy="32" r="4" {s}/>',
+        "check": f'<rect x="4" y="4" width="40" height="40" rx="8" fill="{ACC}"/>'
+                 f'<circle cx="21" cy="21" r="9" {s}/><path d="M28,28 L36,36" {s}/><path d="M17,21 L20,24 L25,18" {s}/>',
     }[kind]
-    return f'<svg viewBox="0 0 48 48" width="{size}" height="{size}" aria-hidden="true">{body}</svg>'
+    return f'<svg viewBox="0 0 48 48" width="46" height="46" aria-hidden="true">{body}</svg>'
 
 
-def icon_at(kind, color, x, y, size):
-    """Ícono dentro de otro SVG, en la posición (x, y)."""
-    return icon(kind, color, size).replace("<svg ", f'<svg x="{x}" y="{y}" ', 1)
+def card(tone, ill, text):
+    return f'<div class="card {tone}"><div class="ill">{ill}</div><p>{text}</p></div>'
 
 
-def failing_api():
-    """Servidor con alerta roja: la API sí está fallando."""
-    return (f'<svg viewBox="0 0 64 64" width="66" role="img" aria-label="API con fallos">'
-            + icon_at("server", "#B7C0CE", 0, 4, 54)
-            + f'<circle cx="46" cy="46" r="15" fill="{CRIT}" stroke="{INK}" stroke-width="3"/>'
-            f'<path d="M46,37 V48" stroke="#fff" stroke-width="4" stroke-linecap="round"/>'
-            f'<circle cx="46" cy="54" r="2.4" fill="#fff"/></svg>')
-
-
-def red_signals():
-    items = [("rate", BLUE, "Rate", "tráfico (req/s)"),
-             ("errors", CRIT, "Errors", "% de errores 5xx"),
-             ("duration", ORANGE, "Duration", "latencia p95")]
-    return '<div class="red">' + "".join(
-        f'<div>{icon(k, c, 38)}<span><b style="color:{c}">{t}</b><br>{d}</span></div>'
-        for k, c, t, d in items) + "</div>"
-
-
-def scenarios():
-    """Los tres escenarios como flechas encadenadas, misma carga en todos."""
-    W, H, w, tip = 1043, 46, 270, 18
-    items = [(OK, "1 · Normal", "sin fallos"),
-             ("#F2B544", "2 · Latencia", "25 % tarda +1,2 s"),
-             (CRIT, "3 · Errores", "12 % responde 500")]
-    out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Tres escenarios: normal, latencia y errores">']
-    for i, (col, t, d) in enumerate(items):
-        x = i * (w + 6)
-        notch = f"L{x + tip},{H / 2}" if i else ""
-        out.append(f'<path d="M{x},0 H{x + w} L{x + w + tip},{H / 2} L{x + w},{H} H{x} {notch} Z" fill="{col}"/>')
-        tx = x + (tip + 14 if i else 16)
-        fill = INK if i == 1 else "#fff"
-        out.append(f'<text x="{tx}" y="{H / 2 + 6}" class="scn" fill="{fill}"><tspan font-weight="800">{t}:</tspan> {d}</text>')
-    out.append(f'<text x="{W - 4}" y="{H / 2 + 6}" text-anchor="end" class="scn2">'
-               f'<tspan font-weight="700" fill="{INK}">Igual carga:</tspan> 2 min 30 s c/u</text>')
-    out.append("</svg>")
-    return "".join(out)
-
-
-def scorecard():
-    """¿Qué detectó cada fallo? Filas = señal, columnas = escenario; resaltadas las detecciones."""
-    cols = [("Normal", OK), ("Latencia", "#E0A12E"), ("Errores", CRIT)]
-    rows = [
-        ("shield", "/health", ["200 OK", "200 OK", "200 OK"], [None, None, None]),
-        ("duration", "Latencia p95", ["52 ms", "1,4 s", "47 ms"], [None, 1, None]),
-        ("errors", "Errores 5xx", ["0 %", "0 %", "12 %"], [None, None, 2]),
-        ("bell", "Alerta a los", ["—", "75 s", "85 s"], [None, 1, 2]),
-    ]
-    tint = {1: "#FCEFD6", 2: "#FBE1DF"}
-    head = "".join(f'<th style="border-bottom:4px solid {c}">{t}</th>' for t, c in cols)
-    body = []
-    for ic, name, vals, hits in rows:
-        cells = []
-        for v, h in zip(vals, hits):
-            if h:
-                cells.append(f'<td class="hit" style="background:{tint[h]}">{v}</td>')
-            elif name == "/health":
-                cells.append(f'<td class="okc">{v}</td>')
-            else:
-                cells.append(f'<td>{v}</td>')
-        body.append(f'<tr><th class="rh">{icon(ic, INK2, 28)}<span>{name}</span></th>{"".join(cells)}</tr>')
-    return f'<table class="sc"><tr><th></th>{head}</tr>{"".join(body)}</table>'
+CLOUD = (f'<svg class="cloud" viewBox="0 0 420 220" aria-hidden="true">'
+         f'<ellipse cx="210" cy="130" rx="190" ry="70" fill="#CFD2F7" opacity=".55"/>'
+         f'<ellipse cx="150" cy="96" rx="90" ry="66" fill="#C6C9F5" opacity=".5"/>'
+         f'<ellipse cx="262" cy="80" rx="104" ry="72" fill="#D3D6F8" opacity=".55"/>'
+         f'<ellipse cx="330" cy="128" rx="74" ry="52" fill="#C9CCF6" opacity=".45"/></svg>')
 
 HTML = f"""<!doctype html>
 <html lang="es"><head><meta charset="utf-8">
 <title>Póster · Disponible no significa sano</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@700;800&display=swap">
 <style>
 @page {{ size: 297mm 420mm; margin: 0; }}
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
 html, body {{ width: 297mm; height: 420mm; }}
-body {{ font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; color: {INK}; background: #F6F4EF;
+body {{ font-family: 'Nunito', 'Open Sans', Arial, sans-serif; color: {INK}; background: #FFFFFF;
   -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
-.page {{ width: 1123px; height: 1587px; display: flex; flex-direction: column; overflow: hidden; }}
-svg text {{ font-family: 'Open Sans', Arial, sans-serif; }}
-.ax {{ font-size: 16px; fill: {MUTED}; }}
-.cat {{ font-size: 18px; font-weight: 700; fill: {INK}; }}
-.cat.sm {{ font-size: 14px; }}
-.val {{ font-size: 16px; fill: {INK2}; }}
-.lbl {{ font-size: 16px; fill: {INK}; }}
-.b {{ font-weight: 700; fill: {INK}; }}
-.num {{ font-size: 17px; font-weight: 800; fill: #fff; }}
-.step {{ font-size: 15px; font-weight: 700; fill: {ORANGE}; letter-spacing: .5px; text-transform: uppercase; }}
-.box {{ font-size: 24px; font-weight: 800; }}
-.desc {{ font-size: 16px; }}
-.scn {{ font-size: 15px; }}
-.scn2 {{ font-size: 15px; fill: {MUTED}; }}
+.page {{ width: 1123px; height: 1587px; position: relative; overflow: hidden; display: flex; flex-direction: column; }}
+.svgt {{ font-family: 'Inter', Arial, sans-serif; font-size: 19px; font-weight: 800; }}
+.svgv {{ font-family: 'Nunito', Arial, sans-serif; font-size: 15px; font-weight: 800; }}
+.svgs {{ font-family: 'Nunito', Arial, sans-serif; font-size: 15px; font-weight: 700; }}
 
-header {{ background: {INK}; color: #F6F4EF; padding: 20px 40px 14px; }}
-.eyebrow {{ font-size: 15px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #F09A63; }}
-.hd {{ display: flex; align-items: center; gap: 24px; }}
-.hl {{ flex: 1; }}
-h1 {{ font-size: 64px; line-height: .98; font-weight: 800; letter-spacing: -2.2px; margin: 6px 0 8px; }}
-.badge {{ display: flex; flex-direction: column; align-items: center; gap: 4px; }}
-.badges {{ display: flex; align-items: center; gap: 10px; }}
-.neq {{ font-size: 44px; font-weight: 800; color: #F09A63; }}
-.badge.bad span {{ color: #FF8A86; }}
-.badge span {{ font-size: 22px; font-weight: 800; color: #7FD3A6; line-height: 1.1; text-align: center; }}
-.badge small {{ display: block; font-size: 15px; font-weight: 600; color: #B7C0CE; }}
-h1 .ne {{ color: #F09A63; }}
-.subtitle {{ font-size: 19px; line-height: 1.25; color: #D5DBE5; }}
+.top {{ position: relative; padding: 46px 64px 0; }}
+.cloud {{ position: absolute; right: 30px; top: 22px; width: 400px; }}
+h1, h2, h3 {{ font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; position: relative; }}
+h1 {{ font-size: 70px; line-height: 1; font-weight: 800; letter-spacing: -2.5px; }}
+.sub {{ font-family: 'Inter', Arial, sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -.8px; margin-top: 10px; position: relative; }}
+.intro {{ margin-top: 20px; border-left: 4px solid {INK}; padding: 2px 0 2px 18px; font-size: 20px; line-height: 1.45; max-width: 960px; position: relative; }}
 
-main {{ flex: 1; padding: 8px 40px 8px; display: flex; flex-direction: column; gap: 6px; }}
-h2 {{ font-size: 25px; font-weight: 800; letter-spacing: -.3px; display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }}
-h2 .n {{ width: 32px; height: 32px; border-radius: 50%; background: {ORANGE}; color: #fff; font-size: 17px;
-  display: inline-flex; align-items: center; justify-content: center; }}
-h3 {{ font-size: 14px; font-weight: 700; color: {MUTED}; text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 4px; }}
-p {{ font-size: 17px; line-height: 1.4; }}
-.card {{ background: #FBFAF7; border: 2px solid #E2DDD2; border-radius: 14px; padding: 14px 18px; }}
+main {{ padding: 0 64px 30px; display: flex; flex-direction: column; }}
+h2 {{ font-size: 36px; font-weight: 800; letter-spacing: -1px; margin: 18px 0 12px; }}
+.row {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding-right: 10px; }}
+.card {{ position: relative; border: 2.6px solid {INK}; border-radius: 18px; padding: 12px 16px 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px; }}
+.card::before {{ content: ""; position: absolute; left: 9px; top: 9px; right: -11px; bottom: -11px;
+  border-radius: 18px; z-index: -1; }}
+.card .ill {{ height: 124px; display: flex; align-items: center; justify-content: center; }}
+.card p {{ font-size: 18.5px; line-height: 1.38; text-align: center; font-weight: 600; }}
+.card p b {{ font-weight: 800; }}
+.card .big {{ font-family: 'Inter', Arial, sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -1px; display: block; line-height: 1.1; }}
+.lav {{ background: {LAV}; color: {LAV_TX}; }} .lav::before {{ background: {LAV_SH}; }}
+.crm {{ background: {CRM}; color: {CRM_TX}; }} .crm::before {{ background: {CRM_SH}; }}
+.pch {{ background: {PCH}; color: {PCH_TX}; }} .pch::before {{ background: {PCH_SH}; }}
+.row {{ isolation: isolate; }}
 
-.obj {{ display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }}
-.q {{ font-size: 20px; line-height: 1.28; font-weight: 700; }}
-.hyp {{ margin-top: 6px; font-size: 15.5px; }}
-.red {{ display: flex; gap: 14px; margin-top: 8px; }}
-.red > div {{ display: flex; align-items: center; gap: 7px; font-size: 14px; line-height: 1.2; color: {MUTED}; }}
-.red b {{ font-size: 15.5px; }}
-.versus {{ display: grid; grid-template-columns: 1fr 1fr; padding: 0; overflow: hidden; }}
-.versus > div {{ padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }}
-.mon {{ background: #E6F1EA; }}
-.usr {{ background: #FBE6DA; }}
-.pillok {{ align-self: flex-start; background: {OK}; color: #fff; font-weight: 800; font-size: 20px; padding: 4px 14px; border-radius: 999px; }}
-.small {{ font-size: 15.5px; line-height: 1.35; color: {MUTED}; }}
-
-.scen {{ margin-top: 8px; }}
-
-.res {{ display: grid; grid-template-columns: 1.15fr 1fr; gap: 14px; }}
-.res > .card {{ display: flex; flex-direction: column; justify-content: space-between; }}
-table.sc {{ width: 100%; border-collapse: separate; border-spacing: 0 6px; }}
-table.sc th {{ font-size: 17px; font-weight: 800; text-align: center; padding: 4px 4px 6px; }}
-table.sc th.rh {{ text-align: left; font-size: 17px; white-space: nowrap; }}
-table.sc th.rh svg {{ vertical-align: middle; margin-right: 6px; }}
-table.sc td {{ text-align: center; font-size: 19px; font-weight: 600; color: {INK2}; padding: 11px 4px; border-radius: 8px; }}
-table.sc td.okc {{ color: {OK}; font-weight: 700; }}
-table.sc td.hit {{ font-size: 28px; font-weight: 800; color: {INK}; }}
-.cap {{ display: flex; align-items: center; gap: 8px; font-size: 16.5px; margin-top: 4px; }}
-.def {{ font-size: 15px; color: {INK2}; margin-top: 4px; }}
-.legend {{ display: flex; gap: 14px; font-size: 15.5px; color: {INK2}; margin: 2px 0 0; }}
-.legend i {{ display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }}
-
-.find {{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }}
-.find .card {{ padding: 8px 16px; display: flex; align-items: center; gap: 14px; }}
-.find .card svg {{ flex: none; }}
-.find .small {{ margin-top: 3px; }}
-.find .k {{ font-size: 36px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; color: {ORANGE}; }}
-.find .card.dark {{ background: {INK}; border-color: {INK}; color: #F6F4EF; }}
-.find .card.dark .small {{ color: #C8CFDA; }}
-.find .card.dark .k {{ color: #F09A63; }}
-.find .t {{ font-size: 17px; font-weight: 800; line-height: 1.25; }}
-
-.concl {{ display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; align-items: center; }}
-.closing {{ background: {INK}; color: #F6F4EF; border-radius: 14px; padding: 12px 18px; font-size: 18px; line-height: 1.4; }}
-.closing b {{ color: #F09A63; }}
-.cl {{ display: flex; flex-direction: column; gap: 8px; }}
-.cl > div {{ display: flex; align-items: center; gap: 10px; font-size: 16.5px; line-height: 1.3; }}
-.cl svg {{ flex: none; }}
-
-footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; align-items: center; }}
-.refs {{ flex: 1; font-size: 14px; line-height: 1.45; color: {INK2}; }}
-.auth {{ font-size: 20px; font-weight: 800; color: {INK}; margin-bottom: 4px; }}
-.qr {{ width: 84px; height: 84px; background: #fff; padding: 7px; border-radius: 8px; flex: none; }}
-.qrtxt {{ font-size: 14.5px; color: {INK2}; width: 175px; line-height: 1.35; }}
+.band {{ margin-top: auto; position: relative; top: 0; background: {BAND}; color: #FFFFFF; border: 2.6px solid {INK}; border-bottom: none;
+  border-radius: 34px 34px 0 0; margin-left: -3px; margin-right: 18px; padding: 30px 64px 26px; }}
+.band h3 {{ font-size: 34px; font-weight: 800; letter-spacing: -.6px; margin-bottom: 18px; }}
+.concl {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }}
+.concl .t {{ display: flex; align-items: center; gap: 12px; font-family: 'Inter', Arial, sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -.4px; line-height: 1.1; }}
+.concl p {{ font-size: 18.5px; line-height: 1.4; margin-top: 8px; color: #EEF0FF; }}
+.foot {{ display: flex; align-items: center; gap: 22px; margin-top: 24px; padding-top: 18px; border-top: 2px solid rgba(255,255,255,.35); }}
+.foot .who {{ flex: 1; }}
+.foot .auth {{ font-family: 'Inter', Arial, sans-serif; font-size: 22px; font-weight: 800; }}
+.foot .meta {{ font-size: 15px; line-height: 1.45; color: #E3E5FF; margin-top: 4px; }}
+.qrtxt {{ font-size: 15px; line-height: 1.35; color: #E3E5FF; width: 150px; text-align: right; }}
+.qr {{ width: 92px; height: 92px; background: #FFFFFF; padding: 7px; border-radius: 10px; flex: none; }}
 </style></head>
 <body><div class="page">
 
-<header>
-  <div class="hd"><div class="hl">
-  <h1>Disponible<br><span class="ne">no significa sano</span></h1>
-  <p class="subtitle">Detección de degradaciones en una API mediante monitoreo con Prometheus y Grafana</p>
-  </div>
-  <div class="badges">
-    <div class="badge">{shield()}<span><small>/health</small>200 OK</span></div>
-    <div class="neq">≠</div>
-    <div class="badge bad">{failing_api()}<span><small>la API</small>falla</span></div>
-  </div></div>
-</header>
+<div class="top">
+  {CLOUD}
+  <h1>Disponible no significa sano</h1>
+  <p class="sub">Cómo detectar una API que falla sin caerse</p>
+  <p class="intro"><b>Objetivo:</b> descubrir cómo detectar que una API tiene problemas aunque siga respondiendo.
+  <b>Hipótesis:</b> medir tráfico, errores y latencia (las señales <b>RED</b>) lo revela.</p>
+</div>
 
 <main>
-<section>
-  <h2><span class="n">1</span>Objetivo e hipótesis</h2>
-  <div class="obj">
-    <div class="card">
-      <p class="q">¿Cómo detectamos que una API tiene problemas de rendimiento o errores <u>aunque siga disponible</u>?</p>
-      <p class="hyp"><b>Hipótesis:</b> las señales <b>RED</b> revelan lo que un health check no ve.</p>
-      {red_signals()}
-    </div>
-    <div class="card versus">
-      <div class="mon"><h3>El monitor ve</h3><span class="pillok">200 OK · ARRIBA</span>
-        <p class="small">El health check solo pregunta “¿responde?”.</p></div>
-      <div class="usr"><h3>El usuario vive</h3>{people()}
-        <p class="small"><b style="color:{INK}">1 de cada 4</b> espera más de 1 s.</p></div>
-    </div>
+  <h2>¿Cuál es el problema?</h2>
+  <div class="row">
+    {card("lav", ill_health_ok(), "El chequeo de salud de la API responde <b>“200 OK”</b>: todo parece estar bien.")}
+    {card("crm", ill_waiting(), "Pero <b>1 de cada 4 usuarios</b> espera más de un segundo por una respuesta…")}
+    {card("pch", ill_error(), "¡…y a otros les llega un <b>error</b>, aunque el monitor siga en verde!")}
   </div>
-</section>
 
-<section>
-  <h2><span class="n">2</span>Metodología: laboratorio reproducible con Docker Compose</h2>
-  {pipeline()}
-  <div class="scen">{scenarios()}</div>
-</section>
-
-<section>
-  <h2><span class="n">3</span>Resultados: ¿qué detectó cada fallo?</h2>
-  <div class="res">
-    <div class="card">
-      {scorecard()}
-      <p class="cap">{icon("shield", OK, 26)}<span>En los tres escenarios, <b>/health respondió 200 OK</b>: no vio ningún fallo.</span></p>
-    </div>
-    <div class="card">
-      <h3>Latencia por escenario (ms)</h3>
-      <div class="legend"><span><i style="background:{BLUE}"></i>mediana</span><span><i style="background:{AQUA}"></i>media</span><span><i style="background:{ORANGE}"></i>p95</span></div>
-      <p class="def"><b>p95:</b> el 95 % de las solicitudes tardó ese tiempo o menos.</p>
-      {latency_chart()}
-    </div>
+  <h2>¿Cómo lo probamos?</h2>
+  <div class="row">
+    {card("lav", ill_traffic(), "<b>k6</b> envía el mismo tráfico constante a una API hecha en Node.js.")}
+    {card("crm", ill_chaos(), "Le provocamos fallos a propósito: <b>lentitud</b> en un escenario y <b>errores</b> en otro.")}
+    {card("pch", ill_dashboard(), "<b>Prometheus</b> mide las señales y avisa; <b>Grafana</b> las muestra en un panel.")}
   </div>
-</section>
 
-<section>
-  <h2><span class="n">4</span>Hallazgos</h2>
-  <div class="find">
-    <div class="card">{icon("duration", ORANGE, 46)}<div><p class="k">47 ms</p><p class="t">Con un 12 % de errores, el p95 siguió bajo</p><p class="small">Los 500 responden rápido: medir solo latencia no alcanza.</p></div></div>
-    <div class="card">{icon("search", BLUE, 46)}<div><p class="k">12 % vs 0 %</p><p class="t">Un bug de instrumentación ocultaba los errores</p><p class="small"><b>k6</b> (cliente) registró 12 % de 5xx; <b>Prometheus</b> mostraba 0 % por una etiqueta mal asignada.</p></div></div>
+  <h2>¿Qué encontramos?</h2>
+  <div class="row">
+    {card("lav", ill_shield(), "<span class='big'>200 OK siempre</span>El chequeo de salud no vio ninguno de los fallos.")}
+    {card("crm", ill_latency(), "<span class='big'>p95: 1,4 s</span>La alerta de lentitud sonó a los 75 s. El promedio no habría avisado.")}
+    {card("pch", ill_errors(), "<span class='big'>12 % de errores</span>La alerta de errores sonó a los 85 s.")}
   </div>
-</section>
-
-<section>
-  <h2><span class="n">5</span>Conclusiones</h2>
-  <div class="concl">
-    <p class="closing">En nuestro laboratorio, <b>/health respondió 200 OK en los tres escenarios</b>. La alerta de latencia detectó la lentitud en <b>75 s</b> y la de errores detectó las respuestas 5xx en <b>85 s</b>.</p>
-    <div class="cl">
-      <div>{icon("bell", ORANGE, 40)}<span><b>Alertar por p95 y % de errores</b>, no por promedio ni por un chequeo binario</span></div>
-      <div>{icon("search", BLUE, 40)}<span><b>Validar la instrumentación</b> contra una fuente independiente</span></div>
-    </div>
-  </div>
-</section>
 </main>
 
-<footer>
-  <div class="refs"><p class="auth">{AUTORES}</p><b>Referencias.</b> Beyer et al. (2016) <i>Site Reliability Engineering</i>, cap. 6, O’Reilly ·
-  Wilkie (2018) <i>The RED Method</i>, Grafana Labs · Prometheus Authors, <i>Documentation</i>.</div>
-  <div class="qrtxt"><b>Código, datos y demo</b><br>Escanea para ver el repositorio y reproducir el laboratorio.</div>
-  <div class="qr">{QR}</div>
-</footer>
+<div class="band">
+  <h3>Lo que aprendimos</h3>
+  <div class="concl">
+    <div><p class="t">{band_icon("neq")}Disponible ≠ sano</p><p>Hay que medir tráfico, errores y latencia, no solo si la API responde.</p></div>
+    <div><p class="t">{band_icon("pct")}Mirar percentiles</p><p>Alertar por el p95 y el % de errores, no por el promedio.</p></div>
+    <div><p class="t">{band_icon("check")}Validar las métricas</p><p>Un error en una etiqueta llegó a ocultar todos los errores.</p></div>
+  </div>
+  <div class="foot">
+    <div class="who"><p class="auth">{AUTORES}</p>
+      <p class="meta">Electiva Cloud Computing · CNCF / Observabilidad · Node.js · Prometheus · Grafana · k6 · Docker<br>
+      Ref.: Beyer et al. (2016) <i>Site Reliability Engineering</i> · Wilkie (2018) <i>The RED Method</i></p></div>
+    <p class="qrtxt"><b>Probalo vos:</b> código, datos y demo en el repositorio</p>
+    <div class="qr">{QR}</div>
+  </div>
+</div>
 
 </div></body></html>
 """
