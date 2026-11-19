@@ -38,8 +38,8 @@ def bar(x, y0, w, h, color):
 
 
 def latency_chart():
-    W, H = 470, 290
-    x0, x1, y0, y1 = 52, 462, 248, 34
+    W, H = 470, 330
+    x0, x1, y0, y1 = 52, 462, 290, 30
     vmax = 1600
     sy = lambda v: y0 - v / vmax * (y0 - y1)
     out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" '
@@ -73,8 +73,8 @@ def latency_chart():
 
 
 def error_chart():
-    W, H = 250, 268
-    x0, x1, y0, y1 = 40, 244, 226, 34
+    W, H = 250, 398
+    x0, x1, y0, y1 = 40, 244, 356, 34
     vmax = 15
     sy = lambda v: y0 - v / vmax * (y0 - y1)
     out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Tasa de errores 5xx por escenario frente al umbral del 5 %">']
@@ -101,31 +101,29 @@ def error_chart():
 
 
 def pipeline():
-    W, H = 1043, 150
-    boxes = [
-        ("1", "Generar carga", "k6", ["30 req/s constantes,", "igual en los 3 escenarios"], "#FBFAF7", INK),
-        ("2", "Instrumentar", "API Node.js", ["prom-client expone", "Rate, Errors y Duration"], INK, "#F6F4EF"),
-        ("3", "Recolectar y alertar", "Prometheus", ["scrape cada 5 s · alertas:", "p95 > 500 ms, 5xx > 5 %"], "#FBFAF7", INK),
-        ("4", "Visualizar", "Grafana", ["dashboard RED", "provisionado como código"], "#FBFAF7", INK),
+    """Flujo de la PoC: cuatro pasos con el mismo estilo (ícono en círculo, nombre y función)."""
+    W, H = 1043, 146
+    steps = [
+        ("load", "k6", "genera 30 req/s"),
+        ("cube", "API Node.js", "expone métricas RED"),
+        ("radar", "Prometheus", "recolecta y alerta"),
+        ("dashboard", "Grafana", "dashboard RED"),
     ]
-    bw, gap = 222, 50
+    cw, r, cy = W / 4, 38, 44
     out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Flujo de la prueba de concepto: k6, API, Prometheus, Grafana">',
            f'<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">'
            f'<path d="M0,0 L10,5 L0,10 z" fill="{ORANGE}"/></marker></defs>']
-    for i, (n, step, title, desc, bg, fg) in enumerate(boxes):
-        x = 3 + i * (bw + gap)
-        stroke = ORANGE if i == 2 else ("#CFC8BA" if bg != INK else INK)
-        sw = 3 if i == 2 else 2
-        out.append(f'<rect x="{x}" y="28" width="{bw}" height="118" rx="12" fill="{bg}" stroke="{stroke}" stroke-width="{sw}"/>')
-        out.append(f'<circle cx="{x + 20}" cy="28" r="16" fill="{ORANGE}"/>')
-        out.append(f'<text x="{x + 20}" y="34" text-anchor="middle" class="num">{n}</text>')
-        out.append(f'<text x="{x + 44}" y="20" class="step">{step}</text>')
-        out.append(f'<text x="{x + 18}" y="78" class="box" fill="{fg}">{title}</text>')
-        col = "#B7C0CE" if bg == INK else MUTED
-        for k, line in enumerate(desc):
-            out.append(f'<text x="{x + 18}" y="{106 + k * 20}" class="desc" fill="{col}">{line}</text>')
+    for i, (ic, title, desc) in enumerate(steps):
+        cx = cw * (i + 0.5)
+        out.append(f'<circle cx="{cx:.1f}" cy="{cy}" r="{r}" fill="#FBFAF7" stroke="#CFC8BA" stroke-width="2"/>')
+        out.append(icon_at(ic, INK2, f"{cx - 23:.1f}", cy - 23, 46))
+        out.append(f'<circle cx="{cx - r + 4:.1f}" cy="{cy - r + 6}" r="13" fill="{ORANGE}"/>')
+        out.append(f'<text x="{cx - r + 4:.1f}" y="{cy - r + 11.5}" text-anchor="middle" class="num">{i + 1}</text>')
+        out.append(f'<text x="{cx:.1f}" y="{cy + r + 32}" text-anchor="middle" class="box" fill="{INK}">{title}</text>')
+        out.append(f'<text x="{cx:.1f}" y="{cy + r + 56}" text-anchor="middle" class="desc" fill="{MUTED}">{desc}</text>')
         if i < 3:
-            out.append(f'<line x1="{x + bw + 6}" x2="{x + bw + gap - 7}" y1="87" y2="87" stroke="{ORANGE}" stroke-width="3" marker-end="url(#ah)"/>')
+            out.append(f'<line x1="{cx + r + 18:.1f}" x2="{cx + cw - r - 18:.1f}" y1="{cy}" y2="{cy}" '
+                       f'stroke="{ORANGE}" stroke-width="3" marker-end="url(#ah)"/>')
     out.append("</svg>")
     return "".join(out)
 
@@ -144,7 +142,7 @@ def people():
 
 def shield():
     """Escudo verde con tilde: el health check dice que todo está bien."""
-    return (f'<svg viewBox="0 0 120 150" width="92" role="img" aria-label="Health check: 200 OK">'
+    return (f'<svg viewBox="0 0 120 150" width="70" role="img" aria-label="Health check: 200 OK">'
             f'<path d="M60,6 L110,24 V68 C110,104 88,128 60,144 C32,128 10,104 10,68 V24 Z" fill="{OK}" stroke="#7FD3A6" stroke-width="3"/>'
             f'<path d="M36,74 L54,92 L86,56" stroke="#fff" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
             f'</svg>')
@@ -170,8 +168,35 @@ def icon(kind, color, size=40):
         "bell": f'<path d="M12,34 V22 A12,12 0 0 1 36,22 V34 L40,38 H8 Z" {s}/><path d="M20,42 A4,4 0 0 0 28,42" {s}/>',
         # Lupa
         "search": f'<circle cx="21" cy="21" r="12" {s}/><path d="M30,30 L41,41" {s}/>',
+        # Carga: pulso de actividad (k6)
+        "load": f'<path d="M3,26 H13 L18,10 L27,40 L32,24 H45" {s}/>',
+        # API: cubo
+        "cube": f'<path d="M24,5 L42,15 V34 L24,44 L6,34 V15 Z" {s}/><path d="M6,15 L24,25 L42,15 M24,25 V44" {s}/>',
+        # Recolectar: radar
+        "radar": f'<circle cx="24" cy="24" r="18" {s}/><circle cx="24" cy="24" r="9" {s}/>'
+                 f'<path d="M24,24 L37,11" {s}/><circle cx="24" cy="24" r="3" fill="{color}"/>',
+        # Visualizar: dashboard
+        "dashboard": f'<rect x="5" y="8" width="38" height="32" rx="4" {s}/><path d="M5,16 H43" {s}/>'
+                     f'<path d="M14,33 V27 M22,33 V22 M30,33 V25 M38,33 V20" {s}/>',
+        # Servidor (API)
+        "server": f'<rect x="6" y="6" width="36" height="15" rx="3" {s}/><rect x="6" y="27" width="36" height="15" rx="3" {s}/>'
+                  f'<circle cx="14" cy="13.5" r="2" fill="{color}"/><circle cx="14" cy="34.5" r="2" fill="{color}"/>',
     }[kind]
     return f'<svg viewBox="0 0 48 48" width="{size}" height="{size}" aria-hidden="true">{body}</svg>'
+
+
+def icon_at(kind, color, x, y, size):
+    """Ícono dentro de otro SVG, en la posición (x, y)."""
+    return icon(kind, color, size).replace("<svg ", f'<svg x="{x}" y="{y}" ', 1)
+
+
+def failing_api():
+    """Servidor con alerta roja: la API sí está fallando."""
+    return (f'<svg viewBox="0 0 64 64" width="66" role="img" aria-label="API con fallos">'
+            + icon_at("server", "#B7C0CE", 0, 4, 54)
+            + f'<circle cx="46" cy="46" r="15" fill="{CRIT}" stroke="{INK}" stroke-width="3"/>'
+            f'<path d="M46,37 V48" stroke="#fff" stroke-width="4" stroke-linecap="round"/>'
+            f'<circle cx="46" cy="54" r="2.4" fill="#fff"/></svg>')
 
 
 def red_signals():
@@ -203,24 +228,29 @@ def scenarios():
     return "".join(out)
 
 
-def mark(ok, text=None):
-    if ok:
-        return (f'<span class="mk"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="11" fill="{OK}"/>'
-                f'<path d="M6.5 12.5 L10.5 16 L17.5 8.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-                f'{text or "detecta"}</span>')
-    return f'<span class="mk no">— {text or "igual"}</span>'
-
-
-MATRIX = [
-    ("Disponibilidad", "up · /health", mark(False), mark(False)),
-    ("Rate", "req/s", mark(False), mark(False)),
-    ("Errors", "% 5xx", mark(False), mark(True, "12 %")),
-    ("Duration", "p95", mark(True, "1,4 s"), mark(False)),
-    ("Alerta", "sostenida 1 min", mark(True, "75 s"), mark(True, "85 s")),
-]
-matrix = "".join(
-    f'<tr><td><b>{a}</b> <span class="sub">{b}</span></td><td>{c}</td><td>{d}</td></tr>'
-    for a, b, c, d in MATRIX)
+def scorecard():
+    """¿Qué detectó cada fallo? Filas = señal, columnas = escenario; resaltadas las detecciones."""
+    cols = [("Normal", OK), ("Latencia", "#E0A12E"), ("Errores", CRIT)]
+    rows = [
+        ("shield", "/health", ["200 OK", "200 OK", "200 OK"], [None, None, None]),
+        ("duration", "Latencia p95", ["52 ms", "1,4 s", "47 ms"], [None, 1, None]),
+        ("errors", "Errores 5xx", ["0 %", "0 %", "12 %"], [None, None, 2]),
+        ("bell", "Alerta a los", ["—", "75 s", "85 s"], [None, 1, 2]),
+    ]
+    tint = {1: "#FCEFD6", 2: "#FBE1DF"}
+    head = "".join(f'<th style="border-bottom:4px solid {c}">{t}</th>' for t, c in cols)
+    body = []
+    for ic, name, vals, hits in rows:
+        cells = []
+        for v, h in zip(vals, hits):
+            if h:
+                cells.append(f'<td class="hit" style="background:{tint[h]}">{v}</td>')
+            elif name == "/health":
+                cells.append(f'<td class="okc">{v}</td>')
+            else:
+                cells.append(f'<td>{v}</td>')
+        body.append(f'<tr><th class="rh">{icon(ic, INK2, 28)}<span>{name}</span></th>{"".join(cells)}</tr>')
+    return f'<table class="sc"><tr><th></th>{head}</tr>{"".join(body)}</table>'
 
 HTML = f"""<!doctype html>
 <html lang="es"><head><meta charset="utf-8">
@@ -233,16 +263,16 @@ body {{ font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; color: {I
   -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
 .page {{ width: 1123px; height: 1587px; display: flex; flex-direction: column; overflow: hidden; }}
 svg text {{ font-family: 'Open Sans', Arial, sans-serif; }}
-.ax {{ font-size: 14px; fill: {MUTED}; }}
-.cat {{ font-size: 16px; font-weight: 700; fill: {INK}; }}
+.ax {{ font-size: 16px; fill: {MUTED}; }}
+.cat {{ font-size: 18px; font-weight: 700; fill: {INK}; }}
 .cat.sm {{ font-size: 14px; }}
-.val {{ font-size: 14px; fill: {INK2}; }}
-.lbl {{ font-size: 14px; fill: {INK}; }}
+.val {{ font-size: 16px; fill: {INK2}; }}
+.lbl {{ font-size: 16px; fill: {INK}; }}
 .b {{ font-weight: 700; fill: {INK}; }}
 .num {{ font-size: 17px; font-weight: 800; fill: #fff; }}
 .step {{ font-size: 15px; font-weight: 700; fill: {ORANGE}; letter-spacing: .5px; text-transform: uppercase; }}
-.box {{ font-size: 25px; font-weight: 800; }}
-.desc {{ font-size: 15px; }}
+.box {{ font-size: 24px; font-weight: 800; }}
+.desc {{ font-size: 16px; }}
 .scn {{ font-size: 15px; }}
 .scn2 {{ font-size: 15px; fill: {MUTED}; }}
 
@@ -252,12 +282,13 @@ header {{ background: {INK}; color: #F6F4EF; padding: 20px 40px 14px; }}
 .hl {{ flex: 1; }}
 h1 {{ font-size: 64px; line-height: .98; font-weight: 800; letter-spacing: -2.2px; margin: 6px 0 8px; }}
 .badge {{ display: flex; flex-direction: column; align-items: center; gap: 4px; }}
+.badges {{ display: flex; align-items: center; gap: 10px; }}
+.neq {{ font-size: 44px; font-weight: 800; color: #F09A63; }}
+.badge.bad span {{ color: #FF8A86; }}
 .badge span {{ font-size: 22px; font-weight: 800; color: #7FD3A6; line-height: 1.1; text-align: center; }}
 .badge small {{ display: block; font-size: 15px; font-weight: 600; color: #B7C0CE; }}
 h1 .ne {{ color: #F09A63; }}
-.subtitle {{ font-size: 20px; line-height: 1.25; color: #D5DBE5; }}
-.authors {{ margin-top: 6px; font-size: 18px; color: #B7C0CE; display: flex; justify-content: space-between; }}
-.authors b {{ color: #F6F4EF; }}
+.subtitle {{ font-size: 19px; line-height: 1.25; color: #D5DBE5; }}
 
 main {{ flex: 1; padding: 8px 40px 8px; display: flex; flex-direction: column; gap: 6px; }}
 h2 {{ font-size: 25px; font-weight: 800; letter-spacing: -.3px; display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }}
@@ -278,51 +309,59 @@ p {{ font-size: 17px; line-height: 1.4; }}
 .mon {{ background: #E6F1EA; }}
 .usr {{ background: #FBE6DA; }}
 .pillok {{ align-self: flex-start; background: {OK}; color: #fff; font-weight: 800; font-size: 20px; padding: 4px 14px; border-radius: 999px; }}
-.small {{ font-size: 15px; line-height: 1.35; color: {MUTED}; }}
+.small {{ font-size: 15.5px; line-height: 1.35; color: {MUTED}; }}
 
 .scen {{ margin-top: 8px; }}
 
-.res {{ display: grid; grid-template-columns: 1.5fr 0.95fr 1.3fr; gap: 12px; }}
-.legend {{ display: flex; gap: 14px; font-size: 14px; color: {INK2}; margin: 2px 0 0; }}
+.res {{ display: grid; grid-template-columns: 1.15fr 1fr; gap: 14px; }}
+.res > .card {{ display: flex; flex-direction: column; justify-content: space-between; }}
+table.sc {{ width: 100%; border-collapse: separate; border-spacing: 0 6px; }}
+table.sc th {{ font-size: 17px; font-weight: 800; text-align: center; padding: 4px 4px 6px; }}
+table.sc th.rh {{ text-align: left; font-size: 17px; white-space: nowrap; }}
+table.sc th.rh svg {{ vertical-align: middle; margin-right: 6px; }}
+table.sc td {{ text-align: center; font-size: 19px; font-weight: 600; color: {INK2}; padding: 11px 4px; border-radius: 8px; }}
+table.sc td.okc {{ color: {OK}; font-weight: 700; }}
+table.sc td.hit {{ font-size: 28px; font-weight: 800; color: {INK}; }}
+.cap {{ display: flex; align-items: center; gap: 8px; font-size: 16.5px; margin-top: 4px; }}
+.def {{ font-size: 15px; color: {INK2}; margin-top: 4px; }}
+.legend {{ display: flex; gap: 14px; font-size: 15.5px; color: {INK2}; margin: 2px 0 0; }}
 .legend i {{ display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }}
-table.m {{ width: 100%; border-collapse: collapse; font-size: 15px; }}
-table.m th {{ text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: {MUTED}; padding: 0 4px 6px; }}
-table.m td {{ padding: 4px 4px; border-top: 1.5px solid #E2DDD2; vertical-align: middle; line-height: 1.2; }}
-table.m tr:last-child td {{ border-top: 2px solid {INK2}; }}
-table.m .sub {{ font-size: 13px; color: {MUTED}; }}
-.mk {{ display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: {OK}; white-space: nowrap; }}
-.mk.no {{ color: #8A93A3; font-weight: 600; }}
 
-.find {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }}
-.find .card {{ padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }}
-.find .k {{ font-size: 34px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; color: {ORANGE}; }}
+.find {{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }}
+.find .card {{ padding: 8px 16px; display: flex; align-items: center; gap: 14px; }}
+.find .card svg {{ flex: none; }}
+.find .small {{ margin-top: 3px; }}
+.find .k {{ font-size: 36px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; color: {ORANGE}; }}
 .find .card.dark {{ background: {INK}; border-color: {INK}; color: #F6F4EF; }}
 .find .card.dark .small {{ color: #C8CFDA; }}
 .find .card.dark .k {{ color: #F09A63; }}
-.find .t {{ font-size: 15.5px; font-weight: 800; line-height: 1.25; }}
+.find .t {{ font-size: 17px; font-weight: 800; line-height: 1.25; }}
 
-.concl {{ display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }}
-.cl {{ display: flex; flex-direction: column; gap: 3px; }}
-.cl > div {{ display: flex; align-items: center; gap: 10px; font-size: 15.5px; line-height: 1.35; }}
+.concl {{ display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; align-items: center; }}
+.closing {{ background: {INK}; color: #F6F4EF; border-radius: 14px; padding: 12px 18px; font-size: 18px; line-height: 1.4; }}
+.closing b {{ color: #F09A63; }}
+.cl {{ display: flex; flex-direction: column; gap: 8px; }}
+.cl > div {{ display: flex; align-items: center; gap: 10px; font-size: 16.5px; line-height: 1.3; }}
 .cl svg {{ flex: none; }}
-.tradeoff {{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px 14px; font-size: 14px; line-height: 1.38; }}
-.tradeoff b {{ display: block; font-size: 15px; margin-bottom: 3px; }}
 
 footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; align-items: center; }}
-.refs {{ flex: 1; font-size: 12.5px; line-height: 1.45; color: {INK2}; }}
+.refs {{ flex: 1; font-size: 14px; line-height: 1.45; color: {INK2}; }}
+.auth {{ font-size: 20px; font-weight: 800; color: {INK}; margin-bottom: 4px; }}
 .qr {{ width: 84px; height: 84px; background: #fff; padding: 7px; border-radius: 8px; flex: none; }}
-.qrtxt {{ font-size: 13.5px; color: {INK2}; width: 175px; line-height: 1.35; }}
+.qrtxt {{ font-size: 14.5px; color: {INK2}; width: 175px; line-height: 1.35; }}
 </style></head>
 <body><div class="page">
 
 <header>
   <div class="hd"><div class="hl">
-  <p class="eyebrow">Proyecto final · Electiva Cloud Computing · CNCF — Observabilidad</p>
   <h1>Disponible<br><span class="ne">no significa sano</span></h1>
   <p class="subtitle">Detección de degradaciones en una API mediante monitoreo con Prometheus y Grafana</p>
   </div>
-  <div class="badge">{shield()}<span><small>/health</small>200 OK</span></div></div>
-  <div class="authors"><b>{AUTORES}</b><span>Noviembre 2026</span></div>
+  <div class="badges">
+    <div class="badge">{shield()}<span><small>/health</small>200 OK</span></div>
+    <div class="neq">≠</div>
+    <div class="badge bad">{failing_api()}<span><small>la API</small>falla</span></div>
+  </div></div>
 </header>
 
 <main>
@@ -350,22 +389,17 @@ footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; ali
 </section>
 
 <section>
-  <h2><span class="n">3</span>Resultados</h2>
+  <h2><span class="n">3</span>Resultados: ¿qué detectó cada fallo?</h2>
   <div class="res">
     <div class="card">
-      <h3>Latencia (ms)</h3>
-      <div class="legend"><span><i style="background:{BLUE}"></i>mediana p50</span><span><i style="background:{AQUA}"></i>media</span><span><i style="background:{ORANGE}"></i>p95</span></div>
+      {scorecard()}
+      <p class="cap">{icon("shield", OK, 26)}<span>En los tres escenarios, <b>/health respondió 200 OK</b>: no vio ningún fallo.</span></p>
+    </div>
+    <div class="card">
+      <h3>Latencia por escenario (ms)</h3>
+      <div class="legend"><span><i style="background:{BLUE}"></i>mediana</span><span><i style="background:{AQUA}"></i>media</span><span><i style="background:{ORANGE}"></i>p95</span></div>
+      <p class="def"><b>p95:</b> el 95 % de las solicitudes tardó ese tiempo o menos.</p>
       {latency_chart()}
-    </div>
-    <div class="card">
-      <h3>Errores 5xx</h3>
-      <div class="legend"><span><i style="background:{ORANGE}"></i>% de peticiones</span></div>
-      {error_chart()}
-    </div>
-    <div class="card">
-      <h3>¿Qué señal detectó cada fallo?</h3>
-      <table class="m"><tr><th style="width:40%">Señal</th><th>Latencia</th><th>Errores</th></tr>{matrix}</table>
-      <p class="small" style="margin-top:8px;"><b style="color:{INK}">Disponibilidad nunca cambió.</b> Cada fallo lo detectó una señal distinta.</p>
     </div>
   </div>
 </section>
@@ -373,35 +407,26 @@ footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; ali
 <section>
   <h2><span class="n">4</span>Hallazgos</h2>
   <div class="find">
-    <div class="card"><p class="k">×27</p><p class="t">El p95 se disparó; la mediana, no</p><p class="small">p95: 52 ms → 1,4 s. Mediana: 19 → 23 ms.</p></div>
-    <div class="card dark"><p class="k">312 ms</p><p class="t">La media no llegó al umbral de 500 ms</p><p class="small">Una alerta por promedio nunca habría sonado.</p></div>
-    <div class="card"><p class="k">−16 %</p><p class="t">Con errores, la latencia “mejoró”</p><p class="small">Los 500 responden enseguida: fallar rápido parece ir rápido.</p></div>
-    <div class="card"><p class="k">12 % vs 0 %</p><p class="t">Un bug ocultaba los errores</p><p class="small">Etiqueta <i>route</i> mal asignada: k6 veía 12 %, Prometheus 0 %.</p></div>
+    <div class="card">{icon("duration", ORANGE, 46)}<div><p class="k">47 ms</p><p class="t">Con un 12 % de errores, el p95 siguió bajo</p><p class="small">Los 500 responden rápido: medir solo latencia no alcanza.</p></div></div>
+    <div class="card">{icon("search", BLUE, 46)}<div><p class="k">12 % vs 0 %</p><p class="t">Un bug de instrumentación ocultaba los errores</p><p class="small"><b>k6</b> (cliente) registró 12 % de 5xx; <b>Prometheus</b> mostraba 0 % por una etiqueta mal asignada.</p></div></div>
   </div>
 </section>
 
 <section>
   <h2><span class="n">5</span>Conclusiones</h2>
   <div class="concl">
+    <p class="closing">En nuestro laboratorio, <b>/health respondió 200 OK en los tres escenarios</b>. La alerta de latencia detectó la lentitud en <b>75 s</b> y la de errores detectó las respuestas 5xx en <b>85 s</b>.</p>
     <div class="cl">
-      <div>{icon("shield", OK, 34)}<span><b>Hipótesis confirmada:</b> ambas degradaciones se detectaron en menos de 90 s con la API “disponible”.</span></div>
-      <div>{icon("bell", ORANGE, 34)}<span><b>Alertar por percentiles y tasa de errores</b>, nunca por promedio ni por estado binario.</span></div>
-      <div>{icon("search", BLUE, 34)}<span><b>Validar la instrumentación:</b> etiquetas correctas, cardinalidad acotada, buckets cerca del umbral.</span></div>
-    </div>
-    <div class="card tradeoff">
-      <div><b style="color:{OK}">A favor</b>Estándar abierto (CNCF), PromQL potente, detección de caídas incluida (pull), todo como código.</div>
-      <div><b style="color:{CRIT}">Limitaciones</b>Percentiles aproximados, un solo nodo, cardinalidad delicada. Dicen <i>qué</i> y <i>dónde</i>, no <i>por qué</i>.</div>
+      <div>{icon("bell", ORANGE, 40)}<span><b>Alertar por p95 y % de errores</b>, no por promedio ni por un chequeo binario</span></div>
+      <div>{icon("search", BLUE, 40)}<span><b>Validar la instrumentación</b> contra una fuente independiente</span></div>
     </div>
   </div>
 </section>
 </main>
 
 <footer>
-  <div class="refs"><b>Referencias.</b> Beyer et al. (2016) <i>Site Reliability Engineering</i>, cap. 6, O’Reilly ·
-  Wilkie (2018) <i>The RED Method</i>, Grafana Labs · Gregg (2013) <i>The USE Method</i> ·
-  Prometheus Authors, <i>Documentation</i> · CNCF (2018) <i>Prometheus graduation</i> ·
-  Tene (2015) <i>How NOT to Measure Latency</i>.<br>
-  <b>Herramientas.</b> Node.js · Express · prom-client · Prometheus 3.5 · Grafana 12.1 · k6 1.3 · Docker Compose.</div>
+  <div class="refs"><p class="auth">{AUTORES}</p><b>Referencias.</b> Beyer et al. (2016) <i>Site Reliability Engineering</i>, cap. 6, O’Reilly ·
+  Wilkie (2018) <i>The RED Method</i>, Grafana Labs · Prometheus Authors, <i>Documentation</i>.</div>
   <div class="qrtxt"><b>Código, datos y demo</b><br>Escanea para ver el repositorio y reproducir el laboratorio.</div>
   <div class="qr">{QR}</div>
 </footer>
