@@ -19,16 +19,23 @@ svg text { font-family: 'Open Sans', Arial, sans-serif; }
 .step { font-size: 15px; font-weight: 700; fill: #eb6834; letter-spacing: .5px; text-transform: uppercase; }
 .box { font-size: 25px; font-weight: 800; }
 .desc { font-size: 15px; }
+.scn { font-size: 15px; }
+.scn2 { font-size: 15px; fill: #5B6475; }
 
-header { background: #141A26; color: #F6F4EF; padding: 24px 40px 18px; }
+header { background: #141A26; color: #F6F4EF; padding: 20px 40px 14px; }
 .eyebrow { font-size: 15px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #F09A63; }
-h1 { font-size: 86px; line-height: 1; font-weight: 800; letter-spacing: -3px; margin: 8px 0 8px; }
+.hd { display: flex; align-items: center; gap: 24px; }
+.hl { flex: 1; }
+h1 { font-size: 64px; line-height: .98; font-weight: 800; letter-spacing: -2.2px; margin: 6px 0 8px; }
+.badge { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.badge span { font-size: 22px; font-weight: 800; color: #7FD3A6; line-height: 1.1; text-align: center; }
+.badge small { display: block; font-size: 15px; font-weight: 600; color: #B7C0CE; }
 h1 .ne { color: #F09A63; }
-.subtitle { font-size: 23px; line-height: 1.25; color: #D5DBE5; }
-.authors { margin-top: 10px; font-size: 18px; color: #B7C0CE; display: flex; justify-content: space-between; }
+.subtitle { font-size: 20px; line-height: 1.25; color: #D5DBE5; }
+.authors { margin-top: 6px; font-size: 18px; color: #B7C0CE; display: flex; justify-content: space-between; }
 .authors b { color: #F6F4EF; }
 
-main { flex: 1; padding: 12px 40px 10px; display: flex; flex-direction: column; gap: 10px; }
+main { flex: 1; padding: 8px 40px 8px; display: flex; flex-direction: column; gap: 6px; }
 h2 { font-size: 25px; font-weight: 800; letter-spacing: -.3px; display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
 h2 .n { width: 32px; height: 32px; border-radius: 50%; background: #eb6834; color: #fff; font-size: 17px;
   display: inline-flex; align-items: center; justify-content: center; }
@@ -39,6 +46,9 @@ p { font-size: 17px; line-height: 1.4; }
 .obj { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
 .q { font-size: 20px; line-height: 1.28; font-weight: 700; }
 .hyp { margin-top: 6px; font-size: 15.5px; }
+.red { display: flex; gap: 14px; margin-top: 8px; }
+.red > div { display: flex; align-items: center; gap: 7px; font-size: 14px; line-height: 1.2; color: #5B6475; }
+.red b { font-size: 15.5px; }
 .versus { display: grid; grid-template-columns: 1fr 1fr; padding: 0; overflow: hidden; }
 .versus > div { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
 .mon { background: #E6F1EA; }
@@ -46,18 +56,14 @@ p { font-size: 17px; line-height: 1.4; }
 .pillok { align-self: flex-start; background: #1E7F4F; color: #fff; font-weight: 800; font-size: 20px; padding: 4px 14px; border-radius: 999px; }
 .small { font-size: 15px; line-height: 1.35; color: #5B6475; }
 
-.chips { display: flex; gap: 10px; margin-top: 8px; }
-.chip { flex: 1; border-radius: 10px; padding: 7px 12px; white-space: nowrap; border: 2px solid #E2DDD2; background: #FBFAF7; font-size: 15px; color: #5B6475; }
-.chip b { color: #141A26; font-size: 16px; }
-.chip.l { border-color: #1baf7a; }
-.chip.e { border-color: #eb6834; }
+.scen { margin-top: 8px; }
 
 .res { display: grid; grid-template-columns: 1.5fr 0.95fr 1.3fr; gap: 12px; }
 .legend { display: flex; gap: 14px; font-size: 14px; color: #3A4354; margin: 2px 0 0; }
 .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
 table.m { width: 100%; border-collapse: collapse; font-size: 15px; }
 table.m th { text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #5B6475; padding: 0 4px 6px; }
-table.m td { padding: 6px 4px; border-top: 1.5px solid #E2DDD2; vertical-align: middle; line-height: 1.2; }
+table.m td { padding: 4px 4px; border-top: 1.5px solid #E2DDD2; vertical-align: middle; line-height: 1.2; }
 table.m tr:last-child td { border-top: 2px solid #3A4354; }
 table.m .sub { font-size: 13px; color: #5B6475; }
 .mk { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #1E7F4F; white-space: nowrap; }
@@ -72,8 +78,9 @@ table.m .sub { font-size: 13px; color: #5B6475; }
 .find .t { font-size: 15.5px; font-weight: 800; line-height: 1.25; }
 
 .concl { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }
-ul { padding-left: 20px; font-size: 15.5px; line-height: 1.35; }
-li { margin-bottom: 3px; }
+.cl { display: flex; flex-direction: column; gap: 3px; }
+.cl > div { display: flex; align-items: center; gap: 10px; font-size: 15.5px; line-height: 1.35; }
+.cl svg { flex: none; }
 .tradeoff { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px 14px; font-size: 14px; line-height: 1.38; }
 .tradeoff b { display: block; font-size: 15px; margin-bottom: 3px; }
 
@@ -85,10 +92,13 @@ footer { background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; alig
 <body><div class="page">
 
 <header>
+  <div class="hd"><div class="hl">
   <p class="eyebrow">Proyecto final · Electiva Cloud Computing · CNCF — Observabilidad</p>
-  <h1>Disponible <span class="ne">≠</span> sano</h1>
+  <h1>Disponible<br><span class="ne">no significa sano</span></h1>
   <p class="subtitle">Detección de degradaciones en una API mediante monitoreo con Prometheus y Grafana</p>
-  <div class="authors"><b>Ana Sena · Francisco Lima · Nicolás Márquez</b><span>Noviembre 2026</span></div>
+  </div>
+  <div class="badge"><svg viewBox="0 0 120 150" width="92" role="img" aria-label="Health check: 200 OK"><path d="M60,6 L110,24 V68 C110,104 88,128 60,144 C32,128 10,104 10,68 V24 Z" fill="#1E7F4F" stroke="#7FD3A6" stroke-width="3"/><path d="M36,74 L54,92 L86,56" stroke="#fff" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span><small>/health</small>200 OK</span></div></div>
+  <div class="authors"><b>Ana Clara Sena · Francisco Lima · Nicolás Márquez</b><span>Noviembre 2026</span></div>
 </header>
 
 <main>
@@ -97,7 +107,8 @@ footer { background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; alig
   <div class="obj">
     <div class="card">
       <p class="q">¿Cómo detectamos que una API tiene problemas de rendimiento o errores <u>aunque siga disponible</u>?</p>
-      <p class="hyp"><b>Hipótesis:</b> las señales <b>RED</b> (<b>R</b>ate: tráfico · <b>E</b>rrors: tasa de errores · <b>D</b>uration: latencia en percentiles) revelan degradaciones que un health check no ve.</p>
+      <p class="hyp"><b>Hipótesis:</b> las señales <b>RED</b> revelan lo que un health check no ve.</p>
+      <div class="red"><div><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><path d="M8,34 A16,16 0 1 1 40,34" stroke="#2a78d6" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M24,34 L33,20" stroke="#2a78d6" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="34" r="3" fill="#2a78d6"/></svg><span><b style="color:#2a78d6">Rate</b><br>tráfico (req/s)</span></div><div><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><path d="M24,7 L43,40 H5 Z" stroke="#D63A39" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M24,19 V29" stroke="#D63A39" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="34.5" r="2.2" fill="#D63A39"/></svg><span><b style="color:#D63A39">Errors</b><br>% de errores 5xx</span></div><div><svg viewBox="0 0 48 48" width="38" height="38" aria-hidden="true"><circle cx="24" cy="27" r="16" stroke="#eb6834" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M24,27 V18" stroke="#eb6834" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M24,27 L30,31" stroke="#eb6834" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M19,5 H29 M24,5 V11" stroke="#eb6834" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b style="color:#eb6834">Duration</b><br>latencia p95</span></div></div>
     </div>
     <div class="card versus">
       <div class="mon"><h3>El monitor ve</h3><span class="pillok">200 OK · ARRIBA</span>
@@ -111,12 +122,7 @@ footer { background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; alig
 <section>
   <h2><span class="n">2</span>Metodología: laboratorio reproducible con Docker Compose</h2>
   <svg viewBox="0 0 1043 150" width="100%" role="img" aria-label="Flujo de la prueba de concepto: k6, API, Prometheus, Grafana"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#eb6834"/></marker></defs><rect x="3" y="28" width="222" height="118" rx="12" fill="#FBFAF7" stroke="#CFC8BA" stroke-width="2"/><circle cx="23" cy="28" r="16" fill="#eb6834"/><text x="23" y="34" text-anchor="middle" class="num">1</text><text x="47" y="20" class="step">Generar carga</text><text x="21" y="78" class="box" fill="#141A26">k6</text><text x="21" y="106" class="desc" fill="#5B6475">30 req/s constantes,</text><text x="21" y="126" class="desc" fill="#5B6475">igual en los 3 escenarios</text><line x1="231" x2="268" y1="87" y2="87" stroke="#eb6834" stroke-width="3" marker-end="url(#ah)"/><rect x="275" y="28" width="222" height="118" rx="12" fill="#141A26" stroke="#141A26" stroke-width="2"/><circle cx="295" cy="28" r="16" fill="#eb6834"/><text x="295" y="34" text-anchor="middle" class="num">2</text><text x="319" y="20" class="step">Instrumentar</text><text x="293" y="78" class="box" fill="#F6F4EF">API Node.js</text><text x="293" y="106" class="desc" fill="#B7C0CE">prom-client expone</text><text x="293" y="126" class="desc" fill="#B7C0CE">Rate, Errors y Duration</text><line x1="503" x2="540" y1="87" y2="87" stroke="#eb6834" stroke-width="3" marker-end="url(#ah)"/><rect x="547" y="28" width="222" height="118" rx="12" fill="#FBFAF7" stroke="#eb6834" stroke-width="3"/><circle cx="567" cy="28" r="16" fill="#eb6834"/><text x="567" y="34" text-anchor="middle" class="num">3</text><text x="591" y="20" class="step">Recolectar y alertar</text><text x="565" y="78" class="box" fill="#141A26">Prometheus</text><text x="565" y="106" class="desc" fill="#5B6475">scrape cada 5 s · alertas:</text><text x="565" y="126" class="desc" fill="#5B6475">p95 > 500 ms, 5xx > 5 %</text><line x1="775" x2="812" y1="87" y2="87" stroke="#eb6834" stroke-width="3" marker-end="url(#ah)"/><rect x="819" y="28" width="222" height="118" rx="12" fill="#FBFAF7" stroke="#CFC8BA" stroke-width="2"/><circle cx="839" cy="28" r="16" fill="#eb6834"/><text x="839" y="34" text-anchor="middle" class="num">4</text><text x="863" y="20" class="step">Visualizar</text><text x="837" y="78" class="box" fill="#141A26">Grafana</text><text x="837" y="106" class="desc" fill="#5B6475">dashboard RED</text><text x="837" y="126" class="desc" fill="#5B6475">provisionado como código</text></svg>
-  <div class="chips">
-    <div class="chip"><b>1 · Normal:</b> sin fallos</div>
-    <div class="chip l"><b>2 · Latencia:</b> 25 % tarda +1,2 s</div>
-    <div class="chip e"><b>3 · Errores:</b> 12 % responde 500</div>
-    <div class="chip"><b>Igual carga:</b> 2 min 30 s c/u</div>
-  </div>
+  <div class="scen"><svg viewBox="0 0 1043 46" width="100%" role="img" aria-label="Tres escenarios: normal, latencia y errores"><path d="M0,0 H270 L288,23.0 L270,46 H0  Z" fill="#1E7F4F"/><text x="16" y="29.0" class="scn" fill="#fff"><tspan font-weight="800">1 · Normal:</tspan> sin fallos</text><path d="M276,0 H546 L564,23.0 L546,46 H276 L294,23.0 Z" fill="#F2B544"/><text x="308" y="29.0" class="scn" fill="#141A26"><tspan font-weight="800">2 · Latencia:</tspan> 25 % tarda +1,2 s</text><path d="M552,0 H822 L840,23.0 L822,46 H552 L570,23.0 Z" fill="#D63A39"/><text x="584" y="29.0" class="scn" fill="#fff"><tspan font-weight="800">3 · Errores:</tspan> 12 % responde 500</text><text x="1039" y="29.0" text-anchor="end" class="scn2"><tspan font-weight="700" fill="#141A26">Igual carga:</tspan> 2 min 30 s c/u</text></svg></div>
 </section>
 
 <section>
@@ -153,11 +159,11 @@ footer { background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; alig
 <section>
   <h2><span class="n">5</span>Conclusiones</h2>
   <div class="concl">
-    <ul>
-      <li><b>Hipótesis confirmada:</b> ambas degradaciones se detectaron en menos de 90 s con la API “disponible”.</li>
-      <li><b>Alertar por percentiles y tasa de errores</b>, nunca por promedio ni por estado binario.</li>
-      <li><b>Validar la instrumentación:</b> etiquetas correctas, cardinalidad acotada, buckets cerca del umbral.</li>
-    </ul>
+    <div class="cl">
+      <div><svg viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><path d="M24,5 L40,11 V24 C40,34 33,41 24,44 C15,41 8,34 8,24 V11 Z" stroke="#1E7F4F" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M17,24 L22,29 L31,19" stroke="#1E7F4F" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Hipótesis confirmada:</b> ambas degradaciones se detectaron en menos de 90 s con la API “disponible”.</span></div>
+      <div><svg viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><path d="M12,34 V22 A12,12 0 0 1 36,22 V34 L40,38 H8 Z" stroke="#eb6834" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M20,42 A4,4 0 0 0 28,42" stroke="#eb6834" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Alertar por percentiles y tasa de errores</b>, nunca por promedio ni por estado binario.</span></div>
+      <div><svg viewBox="0 0 48 48" width="34" height="34" aria-hidden="true"><circle cx="21" cy="21" r="12" stroke="#2a78d6" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M30,30 L41,41" stroke="#2a78d6" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Validar la instrumentación:</b> etiquetas correctas, cardinalidad acotada, buckets cerca del umbral.</span></div>
+    </div>
     <div class="card tradeoff">
       <div><b style="color:#1E7F4F">A favor</b>Estándar abierto (CNCF), PromQL potente, detección de caídas incluida (pull), todo como código.</div>
       <div><b style="color:#D63A39">Limitaciones</b>Percentiles aproximados, un solo nodo, cardinalidad delicada. Dicen <i>qué</i> y <i>dónde</i>, no <i>por qué</i>.</div>

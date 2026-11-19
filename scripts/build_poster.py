@@ -12,7 +12,7 @@ OUT = ROOT / "docs" / "poster" / "poster.html"
 QR = (ROOT / "docs" / "poster" / "qr.svg").read_text(encoding="utf-8")
 QR = QR[QR.index("<svg"):].replace('width="29mm" height="29mm"', 'width="100%" height="100%"')
 
-AUTORES = "Ana Sena · Francisco Lima · Nicolás Márquez"
+AUTORES = "Ana Clara Sena · Francisco Lima · Nicolás Márquez"
 
 # Paleta de series validada (dataviz validate_palette.js: 3 slots, all-pairs, modo claro).
 BLUE, AQUA, ORANGE = "#2a78d6", "#1baf7a", "#eb6834"
@@ -142,6 +142,67 @@ def people():
     return "".join(out)
 
 
+def shield():
+    """Escudo verde con tilde: el health check dice que todo está bien."""
+    return (f'<svg viewBox="0 0 120 150" width="92" role="img" aria-label="Health check: 200 OK">'
+            f'<path d="M60,6 L110,24 V68 C110,104 88,128 60,144 C32,128 10,104 10,68 V24 Z" fill="{OK}" stroke="#7FD3A6" stroke-width="3"/>'
+            f'<path d="M36,74 L54,92 L86,56" stroke="#fff" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+            f'</svg>')
+
+
+def icon(kind, color, size=40):
+    """Íconos de línea simples (viewBox 48 × 48)."""
+    s = f'stroke="{color}" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"'
+    body = {
+        # Rate: velocímetro
+        "rate": f'<path d="M8,34 A16,16 0 1 1 40,34" {s}/><path d="M24,34 L33,20" {s}/>'
+                f'<circle cx="24" cy="34" r="3" fill="{color}"/>',
+        # Errors: triángulo de alerta
+        "errors": f'<path d="M24,7 L43,40 H5 Z" {s}/><path d="M24,19 V29" {s}/>'
+                  f'<circle cx="24" cy="34.5" r="2.2" fill="{color}"/>',
+        # Duration: cronómetro
+        "duration": f'<circle cx="24" cy="27" r="16" {s}/><path d="M24,27 V18" {s}/><path d="M24,27 L30,31" {s}/>'
+                    f'<path d="M19,5 H29 M24,5 V11" {s}/>',
+        # Escudo con tilde
+        "shield": f'<path d="M24,5 L40,11 V24 C40,34 33,41 24,44 C15,41 8,34 8,24 V11 Z" {s}/>'
+                  f'<path d="M17,24 L22,29 L31,19" {s}/>',
+        # Campana de alerta
+        "bell": f'<path d="M12,34 V22 A12,12 0 0 1 36,22 V34 L40,38 H8 Z" {s}/><path d="M20,42 A4,4 0 0 0 28,42" {s}/>',
+        # Lupa
+        "search": f'<circle cx="21" cy="21" r="12" {s}/><path d="M30,30 L41,41" {s}/>',
+    }[kind]
+    return f'<svg viewBox="0 0 48 48" width="{size}" height="{size}" aria-hidden="true">{body}</svg>'
+
+
+def red_signals():
+    items = [("rate", BLUE, "Rate", "tráfico (req/s)"),
+             ("errors", CRIT, "Errors", "% de errores 5xx"),
+             ("duration", ORANGE, "Duration", "latencia p95")]
+    return '<div class="red">' + "".join(
+        f'<div>{icon(k, c, 38)}<span><b style="color:{c}">{t}</b><br>{d}</span></div>'
+        for k, c, t, d in items) + "</div>"
+
+
+def scenarios():
+    """Los tres escenarios como flechas encadenadas, misma carga en todos."""
+    W, H, w, tip = 1043, 46, 270, 18
+    items = [(OK, "1 · Normal", "sin fallos"),
+             ("#F2B544", "2 · Latencia", "25 % tarda +1,2 s"),
+             (CRIT, "3 · Errores", "12 % responde 500")]
+    out = [f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="Tres escenarios: normal, latencia y errores">']
+    for i, (col, t, d) in enumerate(items):
+        x = i * (w + 6)
+        notch = f"L{x + tip},{H / 2}" if i else ""
+        out.append(f'<path d="M{x},0 H{x + w} L{x + w + tip},{H / 2} L{x + w},{H} H{x} {notch} Z" fill="{col}"/>')
+        tx = x + (tip + 14 if i else 16)
+        fill = INK if i == 1 else "#fff"
+        out.append(f'<text x="{tx}" y="{H / 2 + 6}" class="scn" fill="{fill}"><tspan font-weight="800">{t}:</tspan> {d}</text>')
+    out.append(f'<text x="{W - 4}" y="{H / 2 + 6}" text-anchor="end" class="scn2">'
+               f'<tspan font-weight="700" fill="{INK}">Igual carga:</tspan> 2 min 30 s c/u</text>')
+    out.append("</svg>")
+    return "".join(out)
+
+
 def mark(ok, text=None):
     if ok:
         return (f'<span class="mk"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="11" fill="{OK}"/>'
@@ -182,16 +243,23 @@ svg text {{ font-family: 'Open Sans', Arial, sans-serif; }}
 .step {{ font-size: 15px; font-weight: 700; fill: {ORANGE}; letter-spacing: .5px; text-transform: uppercase; }}
 .box {{ font-size: 25px; font-weight: 800; }}
 .desc {{ font-size: 15px; }}
+.scn {{ font-size: 15px; }}
+.scn2 {{ font-size: 15px; fill: {MUTED}; }}
 
-header {{ background: {INK}; color: #F6F4EF; padding: 24px 40px 18px; }}
+header {{ background: {INK}; color: #F6F4EF; padding: 20px 40px 14px; }}
 .eyebrow {{ font-size: 15px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #F09A63; }}
-h1 {{ font-size: 86px; line-height: 1; font-weight: 800; letter-spacing: -3px; margin: 8px 0 8px; }}
+.hd {{ display: flex; align-items: center; gap: 24px; }}
+.hl {{ flex: 1; }}
+h1 {{ font-size: 64px; line-height: .98; font-weight: 800; letter-spacing: -2.2px; margin: 6px 0 8px; }}
+.badge {{ display: flex; flex-direction: column; align-items: center; gap: 4px; }}
+.badge span {{ font-size: 22px; font-weight: 800; color: #7FD3A6; line-height: 1.1; text-align: center; }}
+.badge small {{ display: block; font-size: 15px; font-weight: 600; color: #B7C0CE; }}
 h1 .ne {{ color: #F09A63; }}
-.subtitle {{ font-size: 23px; line-height: 1.25; color: #D5DBE5; }}
-.authors {{ margin-top: 10px; font-size: 18px; color: #B7C0CE; display: flex; justify-content: space-between; }}
+.subtitle {{ font-size: 20px; line-height: 1.25; color: #D5DBE5; }}
+.authors {{ margin-top: 6px; font-size: 18px; color: #B7C0CE; display: flex; justify-content: space-between; }}
 .authors b {{ color: #F6F4EF; }}
 
-main {{ flex: 1; padding: 12px 40px 10px; display: flex; flex-direction: column; gap: 10px; }}
+main {{ flex: 1; padding: 8px 40px 8px; display: flex; flex-direction: column; gap: 6px; }}
 h2 {{ font-size: 25px; font-weight: 800; letter-spacing: -.3px; display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }}
 h2 .n {{ width: 32px; height: 32px; border-radius: 50%; background: {ORANGE}; color: #fff; font-size: 17px;
   display: inline-flex; align-items: center; justify-content: center; }}
@@ -202,6 +270,9 @@ p {{ font-size: 17px; line-height: 1.4; }}
 .obj {{ display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }}
 .q {{ font-size: 20px; line-height: 1.28; font-weight: 700; }}
 .hyp {{ margin-top: 6px; font-size: 15.5px; }}
+.red {{ display: flex; gap: 14px; margin-top: 8px; }}
+.red > div {{ display: flex; align-items: center; gap: 7px; font-size: 14px; line-height: 1.2; color: {MUTED}; }}
+.red b {{ font-size: 15.5px; }}
 .versus {{ display: grid; grid-template-columns: 1fr 1fr; padding: 0; overflow: hidden; }}
 .versus > div {{ padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }}
 .mon {{ background: #E6F1EA; }}
@@ -209,18 +280,14 @@ p {{ font-size: 17px; line-height: 1.4; }}
 .pillok {{ align-self: flex-start; background: {OK}; color: #fff; font-weight: 800; font-size: 20px; padding: 4px 14px; border-radius: 999px; }}
 .small {{ font-size: 15px; line-height: 1.35; color: {MUTED}; }}
 
-.chips {{ display: flex; gap: 10px; margin-top: 8px; }}
-.chip {{ flex: 1; border-radius: 10px; padding: 7px 12px; white-space: nowrap; border: 2px solid #E2DDD2; background: #FBFAF7; font-size: 15px; color: {MUTED}; }}
-.chip b {{ color: {INK}; font-size: 16px; }}
-.chip.l {{ border-color: {AQUA}; }}
-.chip.e {{ border-color: {ORANGE}; }}
+.scen {{ margin-top: 8px; }}
 
 .res {{ display: grid; grid-template-columns: 1.5fr 0.95fr 1.3fr; gap: 12px; }}
 .legend {{ display: flex; gap: 14px; font-size: 14px; color: {INK2}; margin: 2px 0 0; }}
 .legend i {{ display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }}
 table.m {{ width: 100%; border-collapse: collapse; font-size: 15px; }}
 table.m th {{ text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: {MUTED}; padding: 0 4px 6px; }}
-table.m td {{ padding: 6px 4px; border-top: 1.5px solid #E2DDD2; vertical-align: middle; line-height: 1.2; }}
+table.m td {{ padding: 4px 4px; border-top: 1.5px solid #E2DDD2; vertical-align: middle; line-height: 1.2; }}
 table.m tr:last-child td {{ border-top: 2px solid {INK2}; }}
 table.m .sub {{ font-size: 13px; color: {MUTED}; }}
 .mk {{ display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: {OK}; white-space: nowrap; }}
@@ -235,8 +302,9 @@ table.m .sub {{ font-size: 13px; color: {MUTED}; }}
 .find .t {{ font-size: 15.5px; font-weight: 800; line-height: 1.25; }}
 
 .concl {{ display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }}
-ul {{ padding-left: 20px; font-size: 15.5px; line-height: 1.35; }}
-li {{ margin-bottom: 3px; }}
+.cl {{ display: flex; flex-direction: column; gap: 3px; }}
+.cl > div {{ display: flex; align-items: center; gap: 10px; font-size: 15.5px; line-height: 1.35; }}
+.cl svg {{ flex: none; }}
 .tradeoff {{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px 14px; font-size: 14px; line-height: 1.38; }}
 .tradeoff b {{ display: block; font-size: 15px; margin-bottom: 3px; }}
 
@@ -248,9 +316,12 @@ footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; ali
 <body><div class="page">
 
 <header>
+  <div class="hd"><div class="hl">
   <p class="eyebrow">Proyecto final · Electiva Cloud Computing · CNCF — Observabilidad</p>
-  <h1>Disponible <span class="ne">≠</span> sano</h1>
+  <h1>Disponible<br><span class="ne">no significa sano</span></h1>
   <p class="subtitle">Detección de degradaciones en una API mediante monitoreo con Prometheus y Grafana</p>
+  </div>
+  <div class="badge">{shield()}<span><small>/health</small>200 OK</span></div></div>
   <div class="authors"><b>{AUTORES}</b><span>Noviembre 2026</span></div>
 </header>
 
@@ -260,7 +331,8 @@ footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; ali
   <div class="obj">
     <div class="card">
       <p class="q">¿Cómo detectamos que una API tiene problemas de rendimiento o errores <u>aunque siga disponible</u>?</p>
-      <p class="hyp"><b>Hipótesis:</b> las señales <b>RED</b> (<b>R</b>ate: tráfico · <b>E</b>rrors: tasa de errores · <b>D</b>uration: latencia en percentiles) revelan degradaciones que un health check no ve.</p>
+      <p class="hyp"><b>Hipótesis:</b> las señales <b>RED</b> revelan lo que un health check no ve.</p>
+      {red_signals()}
     </div>
     <div class="card versus">
       <div class="mon"><h3>El monitor ve</h3><span class="pillok">200 OK · ARRIBA</span>
@@ -274,12 +346,7 @@ footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; ali
 <section>
   <h2><span class="n">2</span>Metodología: laboratorio reproducible con Docker Compose</h2>
   {pipeline()}
-  <div class="chips">
-    <div class="chip"><b>1 · Normal:</b> sin fallos</div>
-    <div class="chip l"><b>2 · Latencia:</b> 25 % tarda +1,2 s</div>
-    <div class="chip e"><b>3 · Errores:</b> 12 % responde 500</div>
-    <div class="chip"><b>Igual carga:</b> 2 min 30 s c/u</div>
-  </div>
+  <div class="scen">{scenarios()}</div>
 </section>
 
 <section>
@@ -316,11 +383,11 @@ footer {{ background: #ECE8DF; padding: 10px 40px; display: flex; gap: 22px; ali
 <section>
   <h2><span class="n">5</span>Conclusiones</h2>
   <div class="concl">
-    <ul>
-      <li><b>Hipótesis confirmada:</b> ambas degradaciones se detectaron en menos de 90 s con la API “disponible”.</li>
-      <li><b>Alertar por percentiles y tasa de errores</b>, nunca por promedio ni por estado binario.</li>
-      <li><b>Validar la instrumentación:</b> etiquetas correctas, cardinalidad acotada, buckets cerca del umbral.</li>
-    </ul>
+    <div class="cl">
+      <div>{icon("shield", OK, 34)}<span><b>Hipótesis confirmada:</b> ambas degradaciones se detectaron en menos de 90 s con la API “disponible”.</span></div>
+      <div>{icon("bell", ORANGE, 34)}<span><b>Alertar por percentiles y tasa de errores</b>, nunca por promedio ni por estado binario.</span></div>
+      <div>{icon("search", BLUE, 34)}<span><b>Validar la instrumentación:</b> etiquetas correctas, cardinalidad acotada, buckets cerca del umbral.</span></div>
+    </div>
     <div class="card tradeoff">
       <div><b style="color:{OK}">A favor</b>Estándar abierto (CNCF), PromQL potente, detección de caídas incluida (pull), todo como código.</div>
       <div><b style="color:{CRIT}">Limitaciones</b>Percentiles aproximados, un solo nodo, cardinalidad delicada. Dicen <i>qué</i> y <i>dónde</i>, no <i>por qué</i>.</div>

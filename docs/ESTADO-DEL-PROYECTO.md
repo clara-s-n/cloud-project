@@ -6,7 +6,7 @@ cualquier integrante (o Claude en otro dispositivo) retome el trabajo sin haber 
 ## Contexto
 
 - **Materia:** Electiva Cloud Computing, proyecto final grupal.
-- **Equipo:** Ana Sena · Francisco Lima · Nicolás Márquez.
+- **Equipo:** Ana Clara Sena · Francisco Lima · Nicolás Márquez.
 - **Tema aprobado:** categoría 3.2 (CNCF / Observabilidad). *Detección de degradaciones en una API mediante
   monitoreo con Prometheus y Grafana.*
 - **Pregunta de investigación:** ¿cómo detectamos que una API tiene problemas de rendimiento o errores aunque
