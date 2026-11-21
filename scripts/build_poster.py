@@ -146,7 +146,7 @@ def ill_latency():
     body += f'<text x="6" y="{ty - 7:.1f}" class="svgs" fill="{RED}">umbral</text>'
     body += f'<text x="6" y="{ty + 17:.1f}" class="svgs" fill="{RED}">500 ms</text>'
     body += f'<path d="M66,{base} H196" {S}/>'
-    return svg(body, "Escenario de latencia: media 312 ms, por debajo del umbral de 500 ms; p95 1,4 s, por encima", vb="0 0 202 122", w=230)
+    return svg(body, "Escenario de latencia: media 312 ms, por debajo del umbral de 500 ms; p95 1,4 s, por encima", vb="0 0 202 122", w=180)
 
 
 def ill_errors():
@@ -176,6 +176,14 @@ def band_icon(kind):
                  f'<circle cx="21" cy="21" r="9" {s}/><path d="M28,28 L36,36" {s}/><path d="M17,21 L20,24 L25,18" {s}/>',
     }[kind]
     return f'<svg viewBox="0 0 48 48" width="46" height="46" aria-hidden="true">{body}</svg>'
+
+
+def api_icon():
+    """Enchufe: una API conecta un programa con otro."""
+    s = f'stroke="{INK}" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"'
+    return (f'<svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true">'
+            f'<rect x="4" y="4" width="40" height="40" rx="9" fill="{ACC}"/>'
+            f'<path d="M17,13 V19 M31,13 V19 M13,19 H35 V25 A11,11 0 0 1 13,25 Z M24,36 V41" {s}/></svg>')
 
 
 def card(tone, ill, text):
@@ -208,16 +216,19 @@ body {{ font-family: 'Nunito', 'Open Sans', Arial, sans-serif; color: {INK}; bac
 h1, h2, h3 {{ font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif; position: relative; }}
 h1 {{ font-size: 70px; line-height: 1; font-weight: 800; letter-spacing: -2.5px; }}
 .sub {{ font-family: 'Inter', Arial, sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -.8px; margin-top: 10px; position: relative; }}
-.intro {{ margin-top: 20px; border-left: 4px solid {INK}; padding: 2px 0 2px 18px; font-size: 20px; line-height: 1.45; max-width: 960px; position: relative; }}
+.introrow {{ margin-top: 20px; display: grid; grid-template-columns: 1.7fr 1fr; gap: 26px; align-items: center; position: relative; }}
+.intro {{ border-left: 4px solid {INK}; padding: 2px 0 2px 18px; font-size: 20px; line-height: 1.4; display: flex; flex-direction: column; gap: 8px; }}
+.def {{ background: {CRM}; border: 2.6px solid {INK}; border-radius: 14px; padding: 10px 16px 12px; font-size: 16.5px; line-height: 1.38; color: {CRM_TX}; }}
+.def .dt {{ display: flex; align-items: center; gap: 8px; font-family: 'Inter', Arial, sans-serif; font-size: 19px; font-weight: 800; color: {INK}; margin-bottom: 4px; }}
 
 main {{ padding: 0 64px 30px; display: flex; flex-direction: column; }}
-h2 {{ font-size: 36px; font-weight: 800; letter-spacing: -1px; margin: 18px 0 12px; }}
+h2 {{ font-size: 36px; font-weight: 800; letter-spacing: -1px; margin: 16px 0 11px; }}
 .row {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding-right: 10px; }}
 .card {{ position: relative; border: 2.6px solid {INK}; border-radius: 18px; padding: 12px 16px 14px;
   display: flex; flex-direction: column; align-items: center; gap: 6px; }}
 .card::before {{ content: ""; position: absolute; left: 9px; top: 9px; right: -11px; bottom: -11px;
   border-radius: 18px; z-index: -1; }}
-.card .ill {{ height: 124px; display: flex; align-items: center; justify-content: center; }}
+.card .ill {{ height: 108px; display: flex; align-items: center; justify-content: center; }}
 .card p {{ font-size: 18.5px; line-height: 1.38; text-align: center; font-weight: 600; }}
 .card p b {{ font-weight: 800; }}
 .card .big {{ font-family: 'Inter', Arial, sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -1px; display: block; line-height: 1.1; }}
@@ -227,12 +238,12 @@ h2 {{ font-size: 36px; font-weight: 800; letter-spacing: -1px; margin: 18px 0 12
 .row {{ isolation: isolate; }}
 
 .band {{ margin-top: auto; position: relative; top: 0; background: {BAND}; color: #FFFFFF; border: 2.6px solid {INK}; border-bottom: none;
-  border-radius: 34px 34px 0 0; margin-left: -3px; margin-right: 18px; padding: 30px 64px 26px; }}
-.band h3 {{ font-size: 34px; font-weight: 800; letter-spacing: -.6px; margin-bottom: 18px; }}
+  border-radius: 34px 34px 0 0; margin-left: -3px; margin-right: 18px; padding: 22px 64px 18px; }}
+.band h3 {{ font-size: 34px; font-weight: 800; letter-spacing: -.6px; margin-bottom: 12px; }}
 .concl {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }}
 .concl .t {{ display: flex; align-items: center; gap: 12px; font-family: 'Inter', Arial, sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -.4px; line-height: 1.1; }}
 .concl p {{ font-size: 18.5px; line-height: 1.4; margin-top: 8px; color: #EEF0FF; }}
-.foot {{ display: flex; align-items: center; gap: 22px; margin-top: 24px; padding-top: 18px; border-top: 2px solid rgba(255,255,255,.35); }}
+.foot {{ display: flex; align-items: center; gap: 22px; margin-top: 18px; padding-top: 14px; border-top: 2px solid rgba(255,255,255,.35); }}
 .foot .who {{ flex: 1; }}
 .foot .auth {{ font-family: 'Inter', Arial, sans-serif; font-size: 22px; font-weight: 800; }}
 .foot .meta {{ font-size: 15px; line-height: 1.45; color: #E3E5FF; margin-top: 4px; }}
@@ -245,8 +256,16 @@ h2 {{ font-size: 36px; font-weight: 800; letter-spacing: -1px; margin: 18px 0 12
   {CLOUD}
   <h1>Disponible no significa sano</h1>
   <p class="sub">Cómo detectar una API que falla sin caerse</p>
-  <p class="intro"><b>Objetivo:</b> descubrir cómo detectar que una API tiene problemas aunque siga respondiendo.
-  <b>Hipótesis:</b> medir tráfico, errores y latencia (las señales <b>RED</b>) lo revela.</p>
+  <div class="introrow">
+    <div class="intro">
+      <p><b>Objetivo:</b> descubrir cómo detectar que una API tiene problemas aunque siga respondiendo.</p>
+      <p><b>Hipótesis:</b> medir tráfico, errores y latencia (las señales <b>RED</b>) lo revela.</p>
+    </div>
+    <div class="def">
+      <p class="dt">{api_icon()}¿Qué es una API?</p>
+      <p>La “puerta” por la que un programa le pide datos a otro. Ej.: la app del banco consultando tu saldo.</p>
+    </div>
+  </div>
 </div>
 
 <main>
